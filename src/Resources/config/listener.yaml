@@ -14,3 +14,10 @@ services:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener
     public: true
 
+  job_posting.event_listener.insert_tags_listener:
+    class: Dreibein\JobpostingBundle\EventListener\InsertTagsListener
+    arguments:
+      - '@contao.framework'
+      - '@job_posting.job.url_generator'
+    tags:
+      - { name: contao.hook, hook: replaceInsertTags }
