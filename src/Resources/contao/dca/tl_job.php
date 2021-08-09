@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+use Contao\BackendUser;
 use Contao\Config;
 use Contao\System;
 
@@ -171,6 +172,9 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'imageSize',
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'eval' => ['rgxp' => 'natural', 'includeBlankOption' => true, 'nospace' => true, 'helpwizard' => true, 'tl_class' => 'w50'],
+            'options_callback' => static function () {
+                return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
+            },
             'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
         ],
         'floating' => [

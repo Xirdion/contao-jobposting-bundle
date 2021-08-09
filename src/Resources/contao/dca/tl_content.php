@@ -10,13 +10,15 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+$table = 'tl_content';
+
 if ('jobs' === Contao\Input::get('do')) {
-    $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_job';
+    $GLOBALS['TL_DCA'][$table]['config']['ptable'] = 'tl_job';
 }
 
-$GLOBALS['TL_DCA']['tl_content']['palettes']['job_display'] = '{type_legend},type;{job_legend},job_id';
+$GLOBALS['TL_DCA'][$table]['palettes']['job_display'] = '{type_legend},type;{job_legend},job_id,job_template';
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['job_id'] = [
+$GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
     'exclude' => true,
     'inputType' => 'text',
     'eval' => [
@@ -28,4 +30,11 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['job_id'] = [
         'tl_class' => 'w50 wizard',
     ],
     'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
+];
+
+$GLOBALS['TL_DCA'][$table]['fields']['job_template'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
+    'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
 ];
