@@ -1,0 +1,16 @@
+services:
+  job_posting.event_listener.data_container.job_listener:
+    class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener
+    public: true
+    arguments:
+      - '@contao.slug'
+      - '@job_posting.job.url_generator'
+
+  job_posting.event_listener.data_container.job_category_listener:
+    class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener
+    public: true
+
+  job_posting.event_listener.data_container.module_listener:
+    class: Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener
+    public: true
+

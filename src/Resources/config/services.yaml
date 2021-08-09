@@ -1,0 +1,34 @@
+services:
+  job_posting.content_element.job_display_controller:
+    class: Dreibein\JobpostingBundle\Controller\ContentElement\JobDisplayController
+
+  job_posting.frontend_module.job_list_controller:
+    class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController
+    arguments:
+      - '@job_posting.job.job_parser'
+    tags:
+      - { name: contao.frontend_module, category: jobs, type: job_list }
+
+  job_posting.frontend_module.job_reader_controller:
+    class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobReaderController
+    arguments:
+      - '@job_posting.job.job_parser'
+    tags:
+      - { name: contao.frontend_module, category: jobs, type: job_reader }
+
+  job_posting.job.job_parser:
+    class: Dreibein\JobpostingBundle\Job\JobParser
+    arguments:
+      - '@job_posting.job.url_generator'
+
+  job_posting.job.url_generator:
+    class: Dreibein\JobpostingBundle\Job\UrlGenerator
+    public: true
+    arguments:
+      - '@request_stack'
+
+  job_posting.picker.job_picker:
+    class: Dreibein\JobpostingBundle\Picker\JobPickerProvider
+    arguments:
+      - '@knp_menu.factory'
+      - '@router'

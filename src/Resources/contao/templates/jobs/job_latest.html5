@@ -1,0 +1,16 @@
+<div class="layout_latest layout_latest_job arc_<?= $this->archive->id ?> block<?= $this->class ?>" itemscope itemtype="http://schema.org/JobPosting">
+    <div class="inside">
+        <div class="job-name">
+            <span><?= $this->linkHeadline ?></span>
+        </div>
+        <div class="job-category">
+            <span>Elektrotechnik, Konstruktion & Montage</span>
+        </div>
+        <div class="job-location">
+            <span>Osterhofen</span>
+        </div>
+
+    </div>
+</div>
+
+<?php $this->dumpTemplateVars() ;?>

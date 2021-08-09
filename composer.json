@@ -1,0 +1,46 @@
+{
+  "name": "dreibein/contao-jobposting-bundle",
+  "type": "contao-bundle",
+  "description": "Dreibein job posting bundle",
+  "license": "LGPL-3.0+",
+  "authors": [
+    {
+      "name": "Florian Schmid",
+      "email": "f.schmid@agentur-dreibein.de",
+      "homepage": "https://www.agentur-dreibein.de"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "contao/conflicts": "@dev",
+    "friendsofphp/php-cs-fixer": "^3.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "php-http/guzzle6-adapter": "^2.0",
+    "php-parallel-lint/php-parallel-lint": "^1.0",
+    "contao/manager-plugin": "^2.0"
+  },
+  "prefer-stable": true,
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "extra": {
+    "contao-manager-plugin": "Dreibein\\JobpostingBundle\\ContaoManager\\Plugin"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dreibein\\JobpostingBundle\\": "src/"
+    },
+    "classmap": [
+      "src/Resources/contao"
+    ],
+    "exclude-from-classmap": [
+      "src/Resources/contao/config/",
+      "src/Resources/contao/dca/",
+      "src/Resources/contao/languages/",
+      "src/Resources/contao/templates/"
+    ]
+  }
+}

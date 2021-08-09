@@ -1,0 +1,63 @@
+<?php
+
+use Dreibein\JobpostingBundle\Model\JobCategoryModel;
+
+?>
+<div class="layout_full layout_full_job block<?= $this->class ?>" itemscope itemtype="http://schema.org/JobPosting">
+    <div class="inside">
+
+        <div class="ce_text">
+            <div class="inside">
+                <div class="content-wrapper">
+                    <h1 class="headline h1" itemprop="name"><?= $this->headline ?></h1>
+                    <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePublished"><?= $this->date ?></time></p>
+                    <p id="test" class="categories">Kategories</p>
+                    <ul>
+                      <?php
+                        /** @var JobCategoryModel $category */
+                        foreach($this->categories as $category):
+                      ?>
+                        <li>
+                          <?= $category->getTitle(); ?>
+                        </li>
+                      <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <?php if ($this->hasSubHeadline): ?>
+            <div class="ce_headline">
+                <div class="inside">
+                    <h2 class="headline h2" itemprop="headline"><?= $this->subHeadline ?></h2>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($this->hasText): ?>
+            <?= $this->text ?>
+        <?php else: ?>
+            <?php
+            if ($this->addImage) {
+                $contentClass = ' has-image float_' . $this->floating;
+                if($this->floating == 'left' || $this->floating == 'right'){
+                    $contentClass .= ' image_placeholder_y50';
+                }
+            }
+            ?>
+            <div class="ce_text<?= $contentClass;?> block">
+                <div class="inside">
+                    <?php if ($this->addImage): ?>
+                        <?php $this->arrData['href'] = $this->src; ?>
+                        <?php $this->arrData['fullsize'] = true; ?>
+                        <?php $this->insert('image', $this->arrData); ?>
+                    <?php endif; ?>
+
+                    <div class="content-wrapper">
+                        <?= $this->teaser ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
