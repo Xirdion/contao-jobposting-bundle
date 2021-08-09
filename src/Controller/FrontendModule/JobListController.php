@@ -96,7 +96,7 @@ class JobListController extends AbstractFrontendModuleController
         // Find all jobs for the current page
         $jobs = JobModel::findPublishedByPids($jobArchives, $limit, $offset, $model->job_order);
         if (null !== $jobs) {
-            $this->jobParser->init($objPage, $model);
+            $this->jobParser->init($model, $objPage);
             $template->jobs = $this->jobParser->parseJobs($jobs);
         }
 

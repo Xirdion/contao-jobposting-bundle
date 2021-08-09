@@ -16,24 +16,42 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
+use Dreibein\JobpostingBundle\Job\JobParser;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @ContentElement(category="texts")
+ * @ContentElement(category="jobs")
  */
 class JobDisplayController extends AbstractContentElementController
 {
+    private JobParser $jobParser;
+
+    public function __construct(JobParser $jobParser)
+    {
+        $this->jobParser = $jobParser;
+    }
+
+    /**
+     * @throws \Exception
+     */
     protected function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
         $jobId = (int) $model->job_id;
         if (0 === $jobId) {
-            return sprintf('Job with id "%s" not found!', $jobId);
+            throw new \Exception(sprintf('"%s" is not a valid job id!', $jobId));
         }
-        $job = JobModel::findById($jobId);
 
+        $job = JobModel::findById($jobId);
+        if (!$job) {
+            throw new \Exception(sprintf('Job with id "%s" not found!', $jobId));
+        }
         $template->job = $job;
+
+        $page = $this->getPageModel();
+        $this->jobParser->init($model, $page);
+        $template->parsedJob = $this->jobParser->parseJob($job);
 
         return $template->getResponse();
     }

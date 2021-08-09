@@ -1,6 +1,8 @@
 services:
   job_posting.content_element.job_display_controller:
     class: Dreibein\JobpostingBundle\Controller\ContentElement\JobDisplayController
+    arguments:
+      - '@job_posting.job.job_parser'
 
   job_posting.frontend_module.job_list_controller:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController

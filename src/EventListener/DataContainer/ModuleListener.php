@@ -70,6 +70,7 @@ class ModuleListener
      * Get all available job templates.
      *
      * @Callback(table="tl_module", target="fields.job_template.options")
+     * @Callback(table="tl_content", target="fields.job_template.options")
      *
      * @return array
      */

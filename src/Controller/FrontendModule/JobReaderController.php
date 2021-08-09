@@ -77,7 +77,7 @@ class JobReaderController extends AbstractFrontendModuleController
             $model->job_template = 'job_full';
         }
 
-        $this->jobParser->init($objPage, $model);
+        $this->jobParser->init($model, $objPage);
         $template->job = $this->jobParser->parseJob($job);
 
         // Overwrite the page title

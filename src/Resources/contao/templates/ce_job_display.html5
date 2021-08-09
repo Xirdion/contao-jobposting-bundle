@@ -1,1 +1,3 @@
-<?= $this->job->title ?>
+<?php echo $this->job->title; ?>
+
+<?= $this->parsedJob ?>
