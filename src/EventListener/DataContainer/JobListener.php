@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
 
+use Contao\BackendUser;
 use Contao\Config;
 use Contao\Controller;
 use Contao\CoreBundle\Exception\AccessDeniedException;
@@ -20,6 +21,7 @@ use Contao\CoreBundle\Slug\Slug;
 use Contao\DataContainer;
 use Contao\LayoutModel;
 use Contao\PageModel;
+use Contao\System;
 use DateTimeImmutable;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobArchiveModel;
@@ -218,5 +220,25 @@ class JobListener extends AbstractDcaListener
         $title = str_replace('{{page::pageTitle}}', '%s', $title);
 
         return Controller::replaceInsertTags($title);
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.size.options")
+     */
+    public function getImageSizes(): array
+    {
+        return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.addImage.save")
+     *
+     * @param string $checked
+     *
+     * @return int
+     */
+    public function saveAddImageField(string $checked): int
+    {
+        return (int) (bool) $checked;
     }
 }
