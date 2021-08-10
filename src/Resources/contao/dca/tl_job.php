@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
-use Contao\BackendUser;
 use Contao\Config;
 use Contao\System;
 
@@ -86,7 +85,7 @@ $GLOBALS['TL_DCA'][$table] = [
 
     'subpalettes' => [
         'addImage' => 'singleSRC,size,floating,imagemargin,fullsize,overwriteMeta',
-        'overwrite_meta' => 'alt,imageTitle,imageUrl,caption',
+        'overwriteMeta' => 'alt,imageTitle,imageUrl,caption',
     ],
     'fields' => [
         'id' => [
@@ -157,7 +156,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['submitOnChange' => true],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => 'string', 'length' => 1, 'default' => '', 'notnull' => true],
         ],
         'singleSRC' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['singleSRC'],
@@ -172,9 +171,6 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'imageSize',
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'eval' => ['rgxp' => 'natural', 'includeBlankOption' => true, 'nospace' => true, 'helpwizard' => true, 'tl_class' => 'w50'],
-            'options_callback' => static function () {
-                return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
-            },
             'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
         ],
         'floating' => [
@@ -206,7 +202,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['submitOnChange' => true, 'tl_class' => 'w50 clr'],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => 'string', 'length' => 1, 'default' => '', 'notnull' => true],
         ],
         'alt' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['alt'],
