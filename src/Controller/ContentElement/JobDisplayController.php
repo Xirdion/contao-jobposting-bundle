@@ -47,11 +47,10 @@ class JobDisplayController extends AbstractContentElementController
         if (!$job) {
             throw new \Exception(sprintf('Job with id "%s" not found!', $jobId));
         }
-        $template->job = $job;
 
         $page = $this->getPageModel();
         $this->jobParser->init($model, $page);
-        $template->parsedJob = $this->jobParser->parseJob($job);
+        $template->job = $this->jobParser->parseJob($job);
 
         return $template->getResponse();
     }
