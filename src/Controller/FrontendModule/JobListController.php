@@ -57,8 +57,8 @@ class JobListController extends AbstractFrontendModuleController
         }
 
         // Try to load the current page model
-        global $objPage;
-        if (null === $objPage) {
+        $page = $this->getPageModel();
+        if (null === $page) {
             return $template->getResponse();
         }
 
@@ -81,10 +81,10 @@ class JobListController extends AbstractFrontendModuleController
 
             // Get the current page
             $id = 'page_n' . $model->id;
-            $page = Input::get($id) ?? 1;
+            $currentPage = Input::get($id) ?? 1;
 
             // Do not index or cache the page if the page number is outside the range
-            if ($page < 1 || $page > max(ceil($totalJobs / $perPage), 1)) {
+            if ($currentPage < 1 || $currentPage > max(ceil($totalJobs / $perPage), 1)) {
                 throw new PageNotFoundException('Page not found: ' . $request->getUri());
             }
 
@@ -96,7 +96,7 @@ class JobListController extends AbstractFrontendModuleController
         // Find all jobs for the current page
         $jobs = JobModel::findPublishedByPids($jobArchives, $limit, $offset, $model->job_order);
         if (null !== $jobs) {
-            $this->jobParser->init($model, $objPage);
+            $this->jobParser->init($model, $page);
             $template->jobs = $this->jobParser->parseJobs($jobs);
         }
 

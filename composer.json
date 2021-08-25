@@ -5,23 +5,20 @@
   "license": "LGPL-3.0+",
   "authors": [
     {
-      "name": "Florian Schmid",
-      "email": "f.schmid@agentur-dreibein.de",
+      "name": "Agentur Dreibein GmbH",
+      "email": "info@agentur-dreibein.de",
       "homepage": "https://www.agentur-dreibein.de"
     }
   ],
   "require": {
     "php": ">=7.4.0",
     "contao/core-bundle": "^4.9",
-    "contao/news-bundle": "^4.9",
-    "contao/conflicts": "@dev",
-    "friendsofphp/php-cs-fixer": "^3.0"
+    "contao/conflicts": "@dev"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "php-http/guzzle6-adapter": "^2.0",
-    "php-parallel-lint/php-parallel-lint": "^1.0",
-    "contao/manager-plugin": "^2.0"
+    "contao/manager-plugin": "^2.0",
+    "friendsofphp/php-cs-fixer": "^3.0"
   },
   "prefer-stable": true,
   "config": {

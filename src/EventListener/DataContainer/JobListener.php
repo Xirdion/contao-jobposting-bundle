@@ -16,12 +16,12 @@ use Contao\BackendUser;
 use Contao\Config;
 use Contao\Controller;
 use Contao\CoreBundle\Exception\AccessDeniedException;
+use Contao\CoreBundle\Image\ImageSizes;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\CoreBundle\Slug\Slug;
 use Contao\DataContainer;
 use Contao\LayoutModel;
 use Contao\PageModel;
-use Contao\System;
 use DateTimeImmutable;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobArchiveModel;
@@ -32,11 +32,13 @@ use Exception;
 class JobListener extends AbstractDcaListener
 {
     private Slug $slug;
+    private ImageSizes $imageSizes;
     private UrlGenerator $urlGenerator;
 
-    public function __construct(Slug $slug, UrlGenerator $urlGenerator)
+    public function __construct(Slug $slug, ImageSizes $imageSizes, UrlGenerator $urlGenerator)
     {
         $this->slug = $slug;
+        $this->imageSizes = $imageSizes;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -227,18 +229,6 @@ class JobListener extends AbstractDcaListener
      */
     public function getImageSizes(): array
     {
-        return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
-    }
-
-    /**
-     * @Callback(table="tl_job", target="fields.addImage.save")
-     *
-     * @param string $checked
-     *
-     * @return int
-     */
-    public function saveAddImageField(string $checked): int
-    {
-        return (int) (bool) $checked;
+        return $this->imageSizes->getOptionsForUser(BackendUser::getInstance());
     }
 }

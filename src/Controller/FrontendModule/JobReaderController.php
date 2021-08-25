@@ -54,8 +54,8 @@ class JobReaderController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        global $objPage;
-        if (null === $objPage) {
+        $page = $this->getPageModel();
+        if (null === $page) {
             throw new PageNotFoundException('Page not found: ' . $request->getUri());
         }
 
@@ -77,17 +77,17 @@ class JobReaderController extends AbstractFrontendModuleController
             $model->job_template = 'job_full';
         }
 
-        $this->jobParser->init($model, $objPage);
+        $this->jobParser->init($model, $page);
         $template->job = $this->jobParser->parseJob($job);
 
         // Overwrite the page title
         if ($job->getTitle()) {
-            $objPage->pageTitle = $job->getTitle();
+            $page->pageTitle = $job->getTitle();
         }
 
         // Overwrite the page description
         if ($job->getTeaser()) {
-            $objPage->description = $this->prepareMetaDescription($job->getTeaser());
+            $page->description = $this->prepareMetaDescription($job->getTeaser());
         }
 
         return $template->getResponse();

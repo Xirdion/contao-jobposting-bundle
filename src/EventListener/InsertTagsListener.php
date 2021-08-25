@@ -55,7 +55,7 @@ class InsertTagsListener
         /** @var JobModel $adapter */
         $adapter = $this->framework->getAdapter(JobModel::class);
 
-        if (null === ($job = JobModel::findByIdOrAlias($idOrAlias))) {
+        if (null === ($job = $adapter->findByIdOrAlias($idOrAlias))) {
             return '';
         }
 

@@ -40,4 +40,19 @@ class JobArchiveRepository extends Model
     {
         return parent::findAll($arrOptions);
     }
+
+    public static function findByIds(array $ids, array $arrOptions = [])
+    {
+        if (empty($ids) || !\is_array($ids)) {
+            return null;
+        }
+
+        $t = static::$strTable;
+
+        if (!isset($arrOptions['order'])) {
+            $arrOptions['order'] = "$t.title";
+        }
+
+        return static::findBy(["$t.id IN (" . implode(',', array_map('intval', $ids)) . ')'], null, $arrOptions);
+    }
 }

@@ -16,6 +16,9 @@ use Contao\Date;
 use Contao\Model;
 use Dreibein\JobpostingBundle\Model\JobModel;
 
+/**
+ * @method static JobModel|null findByIdOrAlias($varId, array $arrOptions = array())
+ */
 class JobRepository extends Model
 {
     protected static $strTable = 'tl_job';

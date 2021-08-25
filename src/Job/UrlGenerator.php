@@ -72,8 +72,8 @@ class UrlGenerator
         return $this->urlCache[$cacheKey];
     }
 
-    private function ampersand($strString, $blnEncode = true): string
+    private function ampersand(string $strString, bool $encode = true): string
     {
-        return preg_replace('/&(amp;)?/i', ($blnEncode ? '&amp;' : '&'), $strString);
+        return preg_replace('/&(amp;)?/i', ($encode ? '&amp;' : '&'), $strString);
     }
 }
