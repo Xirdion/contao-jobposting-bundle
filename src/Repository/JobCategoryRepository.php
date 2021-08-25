@@ -24,11 +24,11 @@ class JobCategoryRepository extends Model
      *
      * @param int $id
      *
-     * @return JobCategoryModel|null
+     * @return static|null
      */
     public static function findById(int $id): ?JobCategoryModel
     {
-        return self::findByPk($id);
+        return static::findByPk($id);
     }
 
     /**

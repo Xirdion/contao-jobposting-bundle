@@ -24,17 +24,17 @@ class JobArchiveRepository extends Model
      *
      * @param int $id
      *
-     * @return JobArchiveModel|null
+     * @return static|null
      */
     public static function findById(int $id): ?JobArchiveModel
     {
-        return self::findByPk($id);
+        return static::findByPk($id);
     }
 
     /**
      * @param array $arrOptions
      *
-     * @return JobArchiveModel[]|Model\Collection|null
+     * @return static[]|Model\Collection|null
      */
     public static function findAll(array $arrOptions = []): ?Model\Collection
     {

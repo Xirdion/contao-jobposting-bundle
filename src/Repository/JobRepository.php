@@ -28,18 +28,18 @@ class JobRepository extends Model
      *
      * @param int $id
      *
-     * @return JobModel|null
+     * @return static|null
      */
     public static function findById(int $id): ?JobModel
     {
-        return self::findByPk($id);
+        return static::findByPk($id);
     }
 
     /**
      * @param string $alias
      * @param array  $pids
      *
-     * @return JobModel|null
+     * @return static|null
      */
     public static function findPublishedByAliasAndPids(string $alias, array $pids): ?JobModel
     {
@@ -63,7 +63,7 @@ class JobRepository extends Model
      * @param int    $offset
      * @param string $order
      *
-     * @return JobModel[]|Model\Collection|null
+     * @return static[]|Model\Collection|null
      */
     public static function findPublishedByPids(array $pids, int $limit = 0, int $offset = 0, string $order = ''): ?Model\Collection
     {
