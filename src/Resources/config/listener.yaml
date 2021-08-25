@@ -3,7 +3,6 @@ services:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener
     public: true
     arguments:
-      - '@contao.slug'
       - '@contao.image.image_sizes'
       - '@job_posting.job.url_generator'
 

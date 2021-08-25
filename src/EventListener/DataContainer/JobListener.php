@@ -15,29 +15,22 @@ namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
 use Contao\BackendUser;
 use Contao\Config;
 use Contao\Controller;
-use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\Image\ImageSizes;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\Slug\Slug;
-use Contao\DataContainer;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use DateTimeImmutable;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
-use Dreibein\JobpostingBundle\Model\JobArchiveModel;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
-use Exception;
 
 class JobListener extends AbstractDcaListener
 {
-    private Slug $slug;
     private ImageSizes $imageSizes;
     private UrlGenerator $urlGenerator;
 
-    public function __construct(Slug $slug, ImageSizes $imageSizes, UrlGenerator $urlGenerator)
+    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator)
     {
-        $this->slug = $slug;
         $this->imageSizes = $imageSizes;
         $this->urlGenerator = $urlGenerator;
     }
@@ -93,49 +86,6 @@ class JobListener extends AbstractDcaListener
         }
 
         return $data;
-    }
-
-    /**
-     * Auto-generate the news alias if it has not been set yet.
-     *
-     * @Callback(table="tl_job", target="fields.alias.save")
-     *
-     * @param mixed         $newAlias
-     * @param DataContainer $dc
-     *
-     * @throws Exception
-     *
-     * @return string
-     */
-    public function generateAlias($newAlias, DataContainer $dc): string
-    {
-        // Declare the check-function for the slug generator
-        $aliasExists = static function (string $alias) use ($dc): bool {
-            return JobModel::checkAlias((int) $dc->id, $alias) > 0;
-        };
-
-        // Generate alias if there is none
-        if (!$newAlias) {
-            $id = (int) $dc->id;
-
-            $job = JobModel::findById($id);
-            if (null === $job) {
-                throw new AccessDeniedException('Invalid job ID "' . $id . '".');
-            }
-
-            $jobArchive = JobArchiveModel::findById($job->getPid());
-            if (null === $jobArchive) {
-                throw new AccessDeniedException('Invalid job-archive ID "' . $job->getPid() . '".');
-            }
-
-            $newAlias = $this->slug->generate($dc->activeRecord->title, $jobArchive->getJumpTo(), $aliasExists);
-        } elseif (preg_match('/^[1-9]\d*$/', $newAlias)) {
-            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasNumeric'], $newAlias));
-        } elseif ($aliasExists($newAlias)) {
-            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $newAlias));
-        }
-
-        return $newAlias;
     }
 
     /**
