@@ -15,6 +15,9 @@ services:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener
     public: true
 
+  job_posting.event_listener.get_searchable_pages_listener:
+    class: Dreibein\JobpostingBundle\EventListener\GetSearchablePagesListener
+
   job_posting.event_listener.insert_tags_listener:
     class: Dreibein\JobpostingBundle\EventListener\InsertTagsListener
     arguments:
