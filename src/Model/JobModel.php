@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Dreibein\JobpostingBundle\Model;
 
+use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\StringUtil;
 use Dreibein\JobpostingBundle\Repository\JobRepository;
 
@@ -270,5 +271,20 @@ class JobModel extends JobRepository
     public function getStop(): int
     {
         return (int) $this->stop;
+    }
+
+    /**
+     * Get the ID of the jump-to-page of the archive.
+     *
+     * @return int
+     */
+    public function getJumpToPageId(): int
+    {
+        $archive = JobArchiveModel::findById($this->getPid());
+        if (null === $archive) {
+            throw new AccessDeniedException('Invalid job-archive ID "' . $this->getPid() . '".');
+        }
+
+        return $archive->getJumpTo();
     }
 }

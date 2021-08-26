@@ -19,7 +19,7 @@ use Dreibein\JobpostingBundle\Model\JobModel;
 /**
  * @method static JobModel|null findByIdOrAlias($varId, array $arrOptions = array())
  */
-class JobRepository extends Model
+abstract class JobRepository extends AbstractAliasRepository
 {
     protected static $strTable = 'tl_job';
 
@@ -37,18 +37,18 @@ class JobRepository extends Model
 
     /**
      * @param string $alias
-     * @param array  $pids
+     * @param array  $pIds
      *
      * @return static|null
      */
-    public static function findPublishedByAliasAndPids(string $alias, array $pids): ?JobModel
+    public static function findPublishedByAliasAndPids(string $alias, array $pIds): ?JobModel
     {
-        if (empty($pids)) {
+        if (empty($pIds)) {
             return null;
         }
 
         $table = static::$strTable;
-        $columns = static::getSearchColumns($pids);
+        $columns = static::getSearchColumns($pIds);
         $columns[] = $table . '.alias=?';
 
         return static::findOneBy($columns, $alias);
@@ -58,21 +58,21 @@ class JobRepository extends Model
      * Find all jobs within a given range (limit + offset) and a given order
      * for some specific job archives.
      *
-     * @param array  $pids
+     * @param array  $pIds
      * @param int    $limit
      * @param int    $offset
      * @param string $order
      *
      * @return static[]|Model\Collection|null
      */
-    public static function findPublishedByPids(array $pids, int $limit = 0, int $offset = 0, string $order = ''): ?Model\Collection
+    public static function findPublishedByPids(array $pIds, int $limit = 0, int $offset = 0, string $order = ''): ?Model\Collection
     {
-        if (empty($pids)) {
+        if (empty($pIds)) {
             return null;
         }
 
         // Prepare the query columns
-        $columns = static::getSearchColumns($pids);
+        $columns = static::getSearchColumns($pIds);
 
         // Prepare the options for the query
         $table = static::$strTable;
@@ -108,60 +108,47 @@ class JobRepository extends Model
     /**
      * Count all jobs by a given pID.
      *
-     * @param int $pid
+     * @param int $pId
      *
      * @return int
      */
-    public static function countByPid(int $pid): int
+    public static function countByPid(int $pId): int
     {
-        return static::countBy(['pid=?'], [$pid]);
+        return static::countBy(['pid=?'], [$pId]);
     }
 
     /**
      * Get the amount of jobs for some job archives.
      *
-     * @param array $pids
+     * @param array $pIds
      *
      * @return int
      */
-    public static function countPublishedByPids(array $pids): int
+    public static function countPublishedByPids(array $pIds): int
     {
-        if (empty($pids)) {
+        if (empty($pIds)) {
             return 0;
         }
 
-        $columns = static::getSearchColumns($pids);
+        $columns = static::getSearchColumns($pIds);
 
         return static::countBy($columns);
     }
 
     /**
-     * Try to find the amount of entries with the given alias but not a specific ID.
-     *
-     * @param int    $id
-     * @param string $alias
-     *
-     * @return int
-     */
-    public static function checkAlias(int $id, string $alias): int
-    {
-        return static::countBy(['id != ?', 'alias = ?'], [$id, $alias]);
-    }
-
-    /**
      * Prepare the columns for the count- and find-queries on multiple pIDs.
      *
-     * @param array $pids
+     * @param array $pIds
      *
      * @return array
      */
-    private static function getSearchColumns(array $pids): array
+    private static function getSearchColumns(array $pIds): array
     {
         $table = static::$strTable;
         $columns = [];
 
         // all jobs for the given archive IDs.
-        $columns[] = sprintf('%s.pid IN (%s)', $table, implode(',', $pids));
+        $columns[] = sprintf('%s.pid IN (%s)', $table, implode(',', $pIds));
 
         // if not preview mode only show published jobs
         if (false === static::isPreviewMode([])) {

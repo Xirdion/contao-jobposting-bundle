@@ -15,7 +15,7 @@ namespace Dreibein\JobpostingBundle\Repository;
 use Contao\Model;
 use Dreibein\JobpostingBundle\Model\JobArchiveModel;
 
-class JobArchiveRepository extends Model
+abstract class JobArchiveRepository extends Model
 {
     protected static $strTable = 'tl_job_archive';
 
