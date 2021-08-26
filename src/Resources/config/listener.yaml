@@ -1,4 +1,7 @@
 services:
+  job_posting.event_listener.add_job_content_config_listener:
+    class: Dreibein\JobpostingBundle\EventListener\DataContainer\AddJobContentConfigListener
+
   job_posting.event_listener.data_container.job_listener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener
     public: true
@@ -22,5 +25,3 @@ services:
     arguments:
       - '@contao.framework'
       - '@job_posting.job.url_generator'
-    tags:
-      - { name: contao.hook, hook: replaceInsertTags }

@@ -13,12 +13,19 @@ declare(strict_types=1);
 namespace Dreibein\JobpostingBundle\EventListener;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\StringUtil;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobModel;
 
+/**
+ * @Hook("replaceInsertTags")
+ */
 class InsertTagsListener
 {
+    /**
+     * Define the supported insert tags.
+     */
     private const SUPPORTED_TAGS = [
         'job',
         'job_open',
@@ -38,14 +45,16 @@ class InsertTagsListener
 
     public function __invoke(string $tag, bool $useCache, $cacheValue, array $flags)
     {
+        // Get the first part of the insert tag
         $elements = explode('::', $tag);
         $key = strtolower($elements[0]);
 
-        if (\in_array($key, self::SUPPORTED_TAGS, true)) {
-            return $this->replaceJobsInsertTags($key, $elements[1], $flags);
+        // Return if the requested insert tag is not in the supported tags array
+        if (!\in_array($key, self::SUPPORTED_TAGS, true)) {
+            return false;
         }
 
-        return false;
+        return $this->replaceJobsInsertTags($key, $elements[1], $flags);
     }
 
     private function replaceJobsInsertTags(string $insertTag, string $idOrAlias, array $flags): string
@@ -62,6 +71,7 @@ class InsertTagsListener
         $jobUrl = $this->urlGenerator->generateJobUrl($job, \in_array('absolute', $flags, true));
         $jobTitle = $job->getTitle();
 
+        // Check requested insert tag and create response corresponding
         switch ($insertTag) {
             case 'job':
                 return sprintf(

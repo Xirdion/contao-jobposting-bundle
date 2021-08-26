@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 $table = 'tl_content';
 
-if ('jobs' === Contao\Input::get('do')) {
-    $GLOBALS['TL_DCA'][$table]['config']['ptable'] = 'tl_job';
-}
-
-$GLOBALS['TL_DCA'][$table]['palettes']['job_display'] = '{type_legend},type;{job_legend},job_id,job_template';
+$GLOBALS['TL_DCA'][$table]['palettes']['job_display'] =
+    '{type_legend},type;'
+    . '{job_legend},job_id,job_template;'
+    . '{template_legend:hide},customTpl;'
+    . '{protected_legend:hide},protected;'
+    . '{expert_legend:hide},guests,cssID;'
+    . '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
     'exclude' => true,
@@ -29,7 +31,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
         ],
         'tl_class' => 'w50 wizard',
     ],
-    'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
+    'sql' => ['mandatory' => true, 'type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];
 
 $GLOBALS['TL_DCA'][$table]['fields']['job_template'] = [

@@ -38,19 +38,26 @@ class JobDisplayController extends AbstractContentElementController
      */
     protected function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
+        // Get the id of the job to display
         $jobId = (int) $model->job_id;
         if (0 === $jobId) {
             throw new \Exception(sprintf('"%s" is not a valid job id!', $jobId));
         }
 
+        // Check if the id is a valid job id
         $job = JobModel::findById($jobId);
         if (!$job) {
             throw new \Exception(sprintf('Job with id "%s" not found!', $jobId));
         }
 
-        $page = $this->getPageModel();
-        $this->jobParser->init($model, $page);
-        $template->job = $this->jobParser->parseJob($job);
+        $template->hasJob = false;
+        // only show the job, if it is published
+        if ($job->published) {
+            $page = $this->getPageModel();
+            $this->jobParser->init($model, $page);
+            $template->hasJob = true;
+            $template->job = $this->jobParser->parseJob($job);
+        }
 
         return $template->getResponse();
     }

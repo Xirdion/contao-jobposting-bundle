@@ -22,11 +22,23 @@ use Contao\CoreBundle\ServiceAnnotation\PickerProvider;
  */
 class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProviderInterface
 {
+    /**
+     * Returns which DCA table this picker is for.
+     *
+     * @return string
+     */
     public function getDcaTable(): string
     {
         return 'tl_job';
     }
 
+    /**
+     * Returns attributes for the dca picker.
+     *
+     * @param PickerConfig $config
+     *
+     * @return string[]
+     */
     public function getDcaAttributes(PickerConfig $config): array
     {
         $attributes = ['fieldType' => 'text'];
@@ -42,21 +54,46 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
         return $attributes;
     }
 
+    /**
+     * @param PickerConfig $config
+     * @param $value
+     *
+     * @return int
+     */
     public function convertDcaValue(PickerConfig $config, $value): int
     {
         return (int) $value;
     }
 
+    /**
+     * Returns the name of the picker.
+     *
+     * @return string
+     */
     public function getName(): string
     {
         return 'jobPicker';
     }
 
+    /**
+     * Check if the context is supported for this picker.
+     *
+     * @param string $context
+     *
+     * @return bool
+     */
     public function supportsContext($context): bool
     {
         return 'job' === $context;
     }
 
+    /**
+     * Check if the value is supported.
+     *
+     * @param PickerConfig $config
+     *
+     * @return bool
+     */
     public function supportsValue(PickerConfig $config): bool
     {
         foreach (explode(',', $config->getValue()) as $id) {
@@ -68,6 +105,13 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
         return true;
     }
 
+    /**
+     * Get the route parameters for the picker.
+     *
+     * @param PickerConfig|null $config
+     *
+     * @return string[]
+     */
     protected function getRouteParameters(PickerConfig $config = null): array
     {
         return ['do' => 'jobs'];
