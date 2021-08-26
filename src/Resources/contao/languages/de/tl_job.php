@@ -86,18 +86,17 @@ $GLOBALS['TL_LANG']['tl_job'] = [
     ],
 ];
 
-
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['FULL_TIME']  = 'Vollzeit';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PART_TIME']  = 'Teilzeit';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['FULL_TIME'] = 'Vollzeit';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PART_TIME'] = 'Teilzeit';
 $GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['CONTRACTOR'] = 'Anbieter';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['TEMPORARY']  = 'Befristet';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['INTERN']     = 'Intern';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['VOLUNTEER']  = 'Freischaffender';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PER_DIEM']   = 'Tageweise';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['OTHER']      = 'Andere';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['TEMPORARY'] = 'Befristet';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['INTERN'] = 'Intern';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['VOLUNTEER'] = 'Freischaffender';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PER_DIEM'] = 'Tageweise';
+$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['OTHER'] = 'Andere';
 
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['HOUR']      = 'pro Stunde';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['DAY']       = 'pro Tag';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['WEEK']      = 'pro Woche';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['MONTH']     = 'pro Monat';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['YEAR']      = 'pro Jahr';
+$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['HOUR'] = 'pro Stunde';
+$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['DAY'] = 'pro Tag';
+$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['WEEK'] = 'pro Woche';
+$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['MONTH'] = 'pro Monat';
+$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['YEAR'] = 'pro Jahr';

@@ -20,6 +20,7 @@ use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use DateTimeImmutable;
+use Dreibein\JobpostingBundle\Job\AliasGenerator;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
@@ -29,8 +30,10 @@ class JobListener extends AbstractDcaListener
     private ImageSizes $imageSizes;
     private UrlGenerator $urlGenerator;
 
-    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator)
+    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator)
     {
+        parent::__construct($aliasGenerator);
+
         $this->imageSizes = $imageSizes;
         $this->urlGenerator = $urlGenerator;
     }
