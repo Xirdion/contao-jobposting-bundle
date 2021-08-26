@@ -23,6 +23,9 @@ services:
     arguments:
       - '@contao.slug'
 
+  Dreibein\JobpostingBundle\Job\AliasGenerator:
+    alias: 'job_posting.job.alias_generator'
+
   job_posting.job.job_parser:
     class: Dreibein\JobpostingBundle\Job\JobParser
     arguments:
