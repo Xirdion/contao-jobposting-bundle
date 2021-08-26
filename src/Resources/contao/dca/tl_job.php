@@ -80,7 +80,18 @@ $GLOBALS['TL_DCA'][$table] = [
 
     'palettes' => [
         '__selector__' => ['addImage', 'overwriteMeta'],
-        'default' => '{title_legend},title,alias;{category_legend},categories;{date_legend},dateTime;{meta_legend},serpPreview;{teaser_legend},subHeadline,teaser;{image_legend},addImage;{expert_legend:hide},cssClass;{publish_legend},published,start,stop',
+        'default' => '{title_legend},title,alias;'
+                    . '{category_legend},categories;'
+                    . '{date_legend},dateTime;'
+                    . '{meta_legend},serpPreview;'
+                    . '{teaser_legend},subHeadline,teaser;'
+                    . '{image_legend},addImage;'
+                    . '{company_legend},company,companyUrl,companyLogo;'
+                    . '{job_legend},type,times,postal,city,street,region,country,remote;'
+                    . '{salary_legend},salary,salaryInterval;'
+                    . '{conditions_legend},responsibility,skills,qualification,education,experience;'
+                    . '{expert_legend:hide},cssClass;'
+                    . '{publish_legend},published,start,stop',
     ],
 
     'subpalettes' => [
@@ -235,6 +246,136 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'allowHtml' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
+        'company' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, ' notnull' => true, 'default' => ''],
+        ],
+        'companyUrl' => [
+            'label' => &$GLOBALS['TL_LANG']['MSC']['url'],
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'addWizardClass' => false, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'companyLogo' => [
+            'exclude' => true,
+            'inputType' => 'fileTree',
+            'eval' => ['fieldType' => 'radio', 'filesOnly' => true, 'isGallery' => true, 'extensions' => 'jpg,jpeg,gif,png', 'tl_class' => 'clr m12'],
+            'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
+        ],
+        'type' => [
+            'exclude' => true,
+            'inputType' => 'checkbox',
+            'options' => ['FULL_TIME', 'PART_TIME', 'CONTRACTOR', 'TEMPORARY', 'INTERN', 'VOLUNTEER', 'PER_DIEM', 'OTHER'],
+            'reference' => &$GLOBALS['TL_LANG'][$table]['types'],
+            'eval' => ['multiple' => true, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'blob', 'default' => null],
+        ],
+        'times' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'postal' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 32, 'tl_class' => 'clr w50'],
+            'sql' => ['type' => 'text', 'length' => 32, 'notnull' => true, 'default' => ''],
+        ],
+        'city' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'street' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'region' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'country' => [
+            'exclude' => true,
+            'filter' => true,
+            'sorting' => true,
+            'inputType' => 'select',
+            'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
+            'options_callback' => static function () {
+                return System::getCountries();
+            },
+            'sql' => ['type' => 'text', 'length' => 2, 'notnull' => true, 'default' => ''],
+        ],
+        'remote' => [
+            'exclude' => true,
+            'inputType' => 'checkbox',
+            'eval' => ['tl_class' => 'clr'],
+            'sql' => ['type' => 'text', 'notnull' => true, 'default' => ''],
+        ],
+        'salary' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 10, 'rgxp' => 'digit', 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 10, 'notnull' => true, 'default' => ''],
+        ],
+        'salaryInterval' => [
+            'default' => 'MONTH',
+            'exclude' => true,
+            'inputType' => 'select',
+            'options' => ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
+            'reference' => &$GLOBALS['TL_LANG'][$table]['jobIntervals'],
+            'eval' => ['tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 8, 'notnull' => true, 'default' => ''],
+        ],
+        'responsibility' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'skills' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'qualification' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'education' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'experience' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'text', 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'cssClass' => [
             'exclude' => true,

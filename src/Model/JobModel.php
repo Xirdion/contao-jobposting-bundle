@@ -26,6 +26,23 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  * @property int    $dateTime
  * @property string $subHeadline
  * @property string $teaser
+ * @property string $company
+ * @property string $companyLogo
+ * @property string $type
+ * @property string $times
+ * @property string $postal
+ * @property string $city
+ * @property string $street
+ * @property string $region
+ * @property string $country
+ * @property bool   $remote
+ * @property string $salary
+ * @property string $salaryInterval
+ * @property string $responsibility
+ * @property string $skills
+ * @property string $qualification
+ * @property string $education
+ * @property string $experience
  * @property bool   $addImage
  * @property string $singleSRC
  * @property string $size

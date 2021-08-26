@@ -15,6 +15,7 @@ namespace Dreibein\JobpostingBundle\Job;
 use Contao\ContentModel;
 use Contao\Controller;
 use Contao\Date;
+use Contao\Environment;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Contao\Model;
@@ -182,6 +183,27 @@ class JobParser
         // TODO: Check for parseArticles Hook (like in ModuleNews)
 
         // TODO: Check caching (like in ModulesNews)
+
+        $jsonTemplate = new FrontendTemplate('job_json');
+        $jsonTemplate->job = $job;
+
+        // company logo
+        $companyLogo = FilesModel::findByUuid($job->companyLogo)->path;
+        if (!empty($companyLogo)) {
+            $jsonTemplate->companyLogo = Environment::get('base') . $companyLogo;
+        }
+        // employment types
+        $employmentTypes = StringUtil::deserialize($job->type);
+        if (!$employmentTypes) {
+            $employmentTypes = [];
+        }
+        $jsonTemplate->jobTypes = implode(',', $employmentTypes);
+        // start date
+        $jsonTemplate->datePosted = empty($job->start) ? time() : $job->start;
+        $json = $jsonTemplate->parse();
+
+        // TODO: in Contao 4.12 this can be done with a built in service
+        $GLOBALS['TL_HEAD'][] = $json;
 
         return $template->parse();
     }
