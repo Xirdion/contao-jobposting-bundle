@@ -15,7 +15,7 @@ namespace Dreibein\JobpostingBundle\Repository;
 use Contao\Model;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 
-class JobCategoryRepository extends Model
+abstract class JobCategoryRepository extends AbstractAliasRepository
 {
     protected static $strTable = 'tl_job_category';
 

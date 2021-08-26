@@ -108,4 +108,14 @@ class JobCategoryModel extends JobCategoryRepository
     {
         return $this->singleSRC;
     }
+
+    /**
+     * Just use the ID of the jump-to-page of this category.
+     *
+     * @return int
+     */
+    public function getJumpToPageId(): int
+    {
+        return $this->getJumpTo();
+    }
 }

@@ -18,10 +18,13 @@ services:
     tags:
       - { name: contao.frontend_module, category: jobs, type: job_reader }
 
-  job_posting.job.job_alias_generator:
-    class: Dreibein\JobpostingBundle\Job\JobAliasGenerator
+  job_posting.job.alias_generator:
+    class: Dreibein\JobpostingBundle\Job\AliasGenerator
     arguments:
       - '@contao.slug'
+
+  Dreibein\JobpostingBundle\Job\AliasGenerator:
+    alias: 'job_posting.job.alias_generator'
 
   job_posting.job.job_parser:
     class: Dreibein\JobpostingBundle\Job\JobParser
