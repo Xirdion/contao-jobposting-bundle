@@ -63,6 +63,17 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  */
 class JobModel extends JobRepository
 {
+    public const TYPES = [
+        'FULL_TIME',
+        'PART_TIME',
+        'CONTRACTOR',
+        'TEMPORARY',
+        'INTERN',
+        'VOLUNTEER',
+        'PER_DIEM',
+        'OTHER',
+    ];
+
     // TODO: missing ModelMetadataTrait - not available for contao 4.9
 
     /**

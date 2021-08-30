@@ -1,0 +1,8 @@
+job.type.FULL_TIME: 'Vollzeit'
+job.type.PART_TIME: 'Teilzeit'
+job.type.CONTRACTOR: 'Anbieter'
+job.type.TEMPORARY: 'Befristet'
+job.type.INTERN: 'Intern'
+job.type.VOLUNTEER: 'Freischaffender'
+job.type.PER_DIEM: 'Tageweise'
+job.type.OTHER: 'Andere'

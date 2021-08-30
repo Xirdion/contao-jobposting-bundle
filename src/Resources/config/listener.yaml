@@ -9,6 +9,7 @@ services:
       - '@contao.image.image_sizes'
       - '@job_posting.job.url_generator'
       - '@job_posting.job.alias_generator'
+      - '@translator'
 
   job_posting.event_listener.data_container.job_category_listener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener

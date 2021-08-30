@@ -24,18 +24,21 @@ use Dreibein\JobpostingBundle\Job\AliasGenerator;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JobListener extends AbstractDcaListener
 {
     private ImageSizes $imageSizes;
     private UrlGenerator $urlGenerator;
+    private TranslatorInterface $translator;
 
-    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator)
+    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator, TranslatorInterface $translator)
     {
         parent::__construct($aliasGenerator);
 
         $this->imageSizes = $imageSizes;
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -183,5 +186,25 @@ class JobListener extends AbstractDcaListener
     public function getImageSizes(): array
     {
         return $this->imageSizes->getOptionsForUser(BackendUser::getInstance());
+    }
+
+    /**
+     * Get the available types for a job.
+     * These are defined by schema.org.
+     *
+     * @Callback(table="tl_job", target="fields.type.options")
+     *
+     * @return array
+     */
+    public function getJobTypes(): array
+    {
+        $list = [];
+        $lang = $GLOBALS['TL_LANGUAGE'] ?? 'en';
+        $types = JobModel::TYPES;
+        foreach ($types as $type) {
+            $list[$type] = $this->translator->trans($type, [], 'DreibeinJobpostingBundle', $lang);
+        }
+
+        return $list;
     }
 }

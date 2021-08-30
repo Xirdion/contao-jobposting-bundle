@@ -271,8 +271,6 @@ $GLOBALS['TL_DCA'][$table] = [
         'type' => [
             'exclude' => true,
             'inputType' => 'checkbox',
-            'options' => ['FULL_TIME', 'PART_TIME', 'CONTRACTOR', 'TEMPORARY', 'INTERN', 'VOLUNTEER', 'PER_DIEM', 'OTHER'],
-            'reference' => &$GLOBALS['TL_LANG'][$table]['types'],
             'eval' => ['multiple' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
