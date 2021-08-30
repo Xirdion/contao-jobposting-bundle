@@ -17,6 +17,7 @@ use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
 use Dreibein\JobpostingBundle\Job\JobParser;
+use Dreibein\JobpostingBundle\Job\JsonParser;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +28,16 @@ use Symfony\Component\HttpFoundation\Response;
 class JobDisplayController extends AbstractContentElementController
 {
     private JobParser $jobParser;
+    private JsonParser $jsonParser;
 
-    public function __construct(JobParser $jobParser)
+    /**
+     * @param JobParser  $jobParser
+     * @param JsonParser $jsonParser
+     */
+    public function __construct(JobParser $jobParser, JsonParser $jsonParser)
     {
         $this->jobParser = $jobParser;
+        $this->jsonParser = $jsonParser;
     }
 
     /**
@@ -57,6 +64,7 @@ class JobDisplayController extends AbstractContentElementController
             $this->jobParser->init($model, $page);
             $template->hasJob = true;
             $template->job = $this->jobParser->parseJob($job);
+            $template->json = $this->jsonParser->parseJob($job);
         }
 
         return $template->getResponse();

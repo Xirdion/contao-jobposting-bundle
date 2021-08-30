@@ -32,6 +32,9 @@ services:
       - '@job_posting.job.url_generator'
       - '%kernel.project_dir%'
 
+  job_posting.job.json_parser:
+    class: Dreibein\JobpostingBundle\Job\JsonParser
+
   job_posting.job.url_generator:
     class: Dreibein\JobpostingBundle\Job\UrlGenerator
     public: true

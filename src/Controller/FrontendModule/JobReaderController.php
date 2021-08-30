@@ -22,6 +22,7 @@ use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\Template;
 use Dreibein\JobpostingBundle\Job\JobParser;
+use Dreibein\JobpostingBundle\Job\JsonParser;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,15 +33,18 @@ use Symfony\Component\HttpFoundation\Response;
 class JobReaderController extends AbstractFrontendModuleController
 {
     private JobParser $jobParser;
+    private JsonParser $jsonParser;
 
     /**
      * JobReaderController constructor.
      *
-     * @param JobParser $jobParser
+     * @param JobParser  $jobParser
+     * @param JsonParser $jsonParser
      */
-    public function __construct(JobParser $jobParser)
+    public function __construct(JobParser $jobParser, JsonParser $jsonParser)
     {
         $this->jobParser = $jobParser;
+        $this->jsonParser = $jsonParser;
     }
 
     /**
@@ -80,6 +84,7 @@ class JobReaderController extends AbstractFrontendModuleController
 
         $this->jobParser->init($model, $page);
         $template->job = $this->jobParser->parseJob($job);
+        $template->json = $this->jsonParser->parseJob($job);
 
         // Overwrite the page title
         if ($job->getTitle()) {

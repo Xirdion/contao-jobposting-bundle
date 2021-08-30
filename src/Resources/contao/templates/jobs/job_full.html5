@@ -3,7 +3,7 @@
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 
 ?>
-<div class="layout_full layout_full_job block<?= $this->class ?>" itemscope itemtype="http://schema.org/JobPosting">
+<div class="layout_full layout_full_job block<?= $this->class ?>" itemscope itemtype="https://schema.org/JobPosting">
     <div class="inside">
 
         <div class="ce_text">
@@ -61,3 +61,7 @@ use Dreibein\JobpostingBundle\Model\JobCategoryModel;
         <?php endif; ?>
     </div>
 </div>
+
+<?php if ($this->json): ?>
+    <script type="application/ld+json"><?= $this->json ?></script>
+<?php endif; ?>

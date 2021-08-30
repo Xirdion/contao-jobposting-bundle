@@ -28,6 +28,7 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  * @property string $subHeadline
  * @property string $teaser
  * @property string $company
+ * @property string $companyUrl
  * @property string $companyLogo
  * @property string $type
  * @property string $times
@@ -242,6 +243,150 @@ class JobModel extends JobRepository
     public function getCaption(): string
     {
         return $this->caption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompany(): string
+    {
+        return $this->company;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyUrl(): string
+    {
+        return $this->companyUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyLogo(): string
+    {
+        return $this->companyLogo;
+    }
+
+    /**
+     * @return array
+     */
+    public function getType(): array
+    {
+        return StringUtil::deserialize($this->type, true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimes(): string
+    {
+        return $this->times;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostal(): string
+    {
+        return $this->postal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreet(): string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegion(): string
+    {
+        return $this->region;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemote(): bool
+    {
+        return $this->remote;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalary(): float
+    {
+        return (float) $this->salary;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalaryInterval(): string
+    {
+        return $this->salaryInterval;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResponsibility(): string
+    {
+        return $this->responsibility;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSkills(): string
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQualification(): string
+    {
+        return $this->qualification;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEducation(): string
+    {
+        return $this->education;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExperience(): string
+    {
+        return $this->experience;
     }
 
     /**
