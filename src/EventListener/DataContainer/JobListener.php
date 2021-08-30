@@ -202,7 +202,7 @@ class JobListener extends AbstractDcaListener
         $lang = $GLOBALS['TL_LANGUAGE'] ?? 'en';
         $types = JobModel::TYPES;
         foreach ($types as $type) {
-            $list[$type] = $this->translator->trans($type, [], 'DreibeinJobpostingBundle', $lang);
+            $list[$type] = $this->translator->trans('job.type.' . $type, [], 'DreibeinJobpostingBundle', $lang);
         }
 
         return $list;
