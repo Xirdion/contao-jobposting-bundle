@@ -1,3 +1,7 @@
 <?php echo $this->job->title; ?>
 
 <?= $this->parsedJob ?>
+
+<?php if ($this->json): ?>
+    <script type="application/ld+json"><?= $this->json ?></script>
+<?php endif; ?>

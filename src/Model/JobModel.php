@@ -266,7 +266,7 @@ class JobModel extends JobRepository
      */
     public function getCompanyLogo(): string
     {
-        return $this->companyLogo;
+        return (string) $this->companyLogo;
     }
 
     /**
@@ -330,7 +330,7 @@ class JobModel extends JobRepository
      */
     public function isRemote(): bool
     {
-        return $this->remote;
+        return (bool) $this->remote;
     }
 
     /**

@@ -61,7 +61,3 @@ use Dreibein\JobpostingBundle\Model\JobCategoryModel;
         <?php endif; ?>
     </div>
 </div>
-
-<?php if ($this->json): ?>
-    <script type="application/ld+json"><?= $this->json ?></script>
-<?php endif; ?>

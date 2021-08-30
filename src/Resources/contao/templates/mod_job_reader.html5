@@ -2,7 +2,11 @@
 
 <?php $this->block('content'); ?>
 
-<?= $this->job ?>
+    <?= $this->job ?>
+
+    <?php if ($this->json): ?>
+        <script type="application/ld+json"><?= $this->json ?></script>
+    <?php endif; ?>
 
     <!-- indexer::stop -->
     <p class="back"><a href="<?= $this->referer ?>" title="<?= $this->back ?>"><?= $this->back ?></a></p>
