@@ -3,6 +3,7 @@ services:
     class: Dreibein\JobpostingBundle\Controller\ContentElement\JobDisplayController
     arguments:
       - '@job_posting.job.job_parser'
+      - '@job_posting.job.json_parser'
 
   job_posting.frontend_module.job_list_controller:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController
@@ -15,6 +16,7 @@ services:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobReaderController
     arguments:
       - '@job_posting.job.job_parser'
+      - '@job_posting.job.json_parser'
     tags:
       - { name: contao.frontend_module, category: jobs, type: job_reader }
 
