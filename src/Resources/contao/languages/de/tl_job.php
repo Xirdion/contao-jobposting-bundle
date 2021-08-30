@@ -66,17 +66,6 @@ $GLOBALS['TL_LANG']['tl_job'] = [
     'delete' => ['löschen', 'Job %s löschen'],
     'show' => ['Details anzeigen', 'Details des Jobs %s anzeigen'],
 
-    'types' => [
-        'FULL_TIME' => 'Vollzeit',
-        'PART_TIME' => 'Teilzeit',
-        'CONTRACTOR' => 'Anbieter',
-        'TEMPORARY' => 'Befristet',
-        'INTERN' => 'Intern',
-        'VOLUNTEER' => 'Freischaffender',
-        'PER_DIEM' => 'Tageweise',
-        'OTHER' => 'Andere',
-    ],
-
     'jobIntervals' => [
         'HOUR' => 'pro Stunde',
         'DAY' => 'pro Tag',
