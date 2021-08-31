@@ -21,6 +21,7 @@ use Contao\Model;
 use Contao\Model\Collection;
 use Contao\PageModel;
 use Contao\StringUtil;
+use Contao\System;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Exception;
@@ -131,8 +132,6 @@ class JobParser
         // Add some data to the template
         $template->class = $cssClass;
         $template->headline = $job->getTitle();
-        $template->subHeadline = $job->getSubHeadline();
-        $template->hasSubHeadline = ('' !== $job->getSubHeadline());
         $template->linkHeadline = $this->generateLink($job->getTitle(), $job);
         $template->more = $this->generateLink($GLOBALS['TL_LANG']['MSC']['more'], $job, true);
         $template->link = $this->urlGenerator->generateJobUrl($job);
@@ -171,10 +170,17 @@ class JobParser
         $template->date = Date::parse($dateimFormat, $job->getDateTime());
         $template->timestamp = $job->getDateTime();
         $template->datetime = date('Y-m-d\TH:i:sP', $job->getDateTime());
-        $template->addImage = false;
-        $template->addBefore = false;
+
+        // location
+        $template->street = $job->getStreet();
+        $template->city = $job->getCity();
+        $template->region = $job->getRegion();
+        $template->postal = $job->getPostal();
+        $template->country = System::getCountries()[$job->getCountry()];
 
         // Add an image
+        $template->addImage = false;
+        $template->addBefore = false;
         if ($job->isAddImage()) {
             $this->addImageToTemplate($job, $template);
         }

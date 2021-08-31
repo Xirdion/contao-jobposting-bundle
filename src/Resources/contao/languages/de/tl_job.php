@@ -31,7 +31,6 @@ $GLOBALS['TL_LANG']['tl_job'] = [
     'alias' => ['Jobalias', 'Der Jobalias ist eine eindeutige Referenz, die anstelle der numerischen Job-ID aufgerufen werden kann.'],
     'categories' => ['Kategorien', 'Eine oder mehrere Kategorien auswählen.'],
     'dateTime' => ['Datum und Uhrzeit', 'Bitten geben Sie das Datum und die Uhrzeit gemäß dem globalen Format ein.'],
-    'subHeadline' => ['Unterüberschrift', 'Hier können Sie eine Unterüberschrift eingeben.'],
     'teaser' => ['Teasertext', 'Der Teasertext kann in einer Jobliste anstatt des ganzen Eintrags angezeigt werden.'],
     'addImage' => ['Ein Bild hinzufügen', 'Dem Job ein Bild hinzufügen.'],
     'company' => ['Firma', 'Name der Firma'],

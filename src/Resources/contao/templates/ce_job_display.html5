@@ -1,7 +1,13 @@
-<?php echo $this->job->title; ?>
+<?php $this->extend('block_searchable'); ?>
 
-<?= $this->parsedJob ?>
+<?php $this->block('content'); ?>
 
-<?php if ($this->json): ?>
-    <script type="application/ld+json"><?= $this->json ?></script>
-<?php endif; ?>
+    <?php if ($this->hasJob): ?>
+        <?= $this->job ?>
+
+        <?php if ($this->json): ?>
+            <script type="application/ld+json"><?= $this->json ?></script>
+        <?php endif; ?>
+    <?php endif; ?>
+
+<?php $this->endblock(); ?>
