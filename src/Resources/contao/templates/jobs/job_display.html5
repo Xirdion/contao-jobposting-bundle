@@ -1,7 +1,0 @@
-Job-Display für <?= $this->headline ?>
-
-<?php if($this->addImage): ?>
-    <?php $this->arrData['href'] = $this->src; ?>
-    <?php $this->arrData['fullsize'] = true; ?>
-    <?php $this->insert('image', $this->arrData); ?>
-<?php endif; ?>

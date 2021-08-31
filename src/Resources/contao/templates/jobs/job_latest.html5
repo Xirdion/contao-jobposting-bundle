@@ -1,16 +1,34 @@
-<div class="layout_latest layout_latest_job arc_<?= $this->archive->id ?> block<?= $this->class ?>" itemscope itemtype="http://schema.org/JobPosting">
+<div class="layout_latest layout_latest_job arc_<?= $this->archive->getId() ?> block<?= $this->class ?>" itemscope itemtype="https://schema.org/JobPosting">
     <div class="inside">
-        <div class="job-name">
-            <span><?= $this->linkHeadline ?></span>
-        </div>
-        <div class="job-category">
-            <span>Elektrotechnik, Konstruktion & Montage</span>
-        </div>
-        <div class="job-location">
-            <span>Osterhofen</span>
+        <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePosted"><?= $this->date ?></time></p>
+
+        <?php if ($this->addImage): ?>
+            <?php $this->insert('image', $this->arrData); ?>
+        <?php endif; ?>
+
+        <h2 itemprop="title"><?= $this->linkHeadline ?></h2>
+
+        <div class="categories">
+            <ul>
+                <?php foreach ($this->categories as $category): ?>
+                    <li><?= $category->getTitle() ?></li>
+                <?php endforeach; ?>
+            </ul>
         </div>
 
+        <div class="location" itemprop="jobLocation">
+            <address>
+                <span><?= $this->street ?></span><br>
+                <span><?= $this->postal ?>&nbsp;<?= $this->city ?></span><br>
+                <span><?= $this->region ?></span><br>
+                <span><?= $this->country ?></span>
+            </address>
+        </div>
+
+        <div class="ce_text block" itemprop="description">
+            <?= $this->teaser ?>
+        </div>
+
+        <p class="more"><?= $this->more ?></p>
     </div>
 </div>
-
-<?php $this->dumpTemplateVars() ;?>

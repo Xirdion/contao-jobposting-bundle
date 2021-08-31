@@ -84,7 +84,7 @@ $GLOBALS['TL_DCA'][$table] = [
                     . '{category_legend},categories;'
                     . '{date_legend},dateTime;'
                     . '{meta_legend},serpPreview;'
-                    . '{teaser_legend},subHeadline,teaser;'
+                    . '{teaser_legend},teaser;'
                     . '{image_legend},addImage;'
                     . '{company_legend},company,companyUrl,companyLogo;'
                     . '{job_legend},type,times,postal,city,street,region,country,remote;'
@@ -148,13 +148,6 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'serpPreview',
             'eval' => ['titleFields' => ['pageTitle', 'title'], 'descriptionFields' => ['description', 'teaser']],
             'sql' => null,
-        ],
-        'subHeadline' => [
-            'exclude' => true,
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'teaser' => [
             'exclude' => true,
