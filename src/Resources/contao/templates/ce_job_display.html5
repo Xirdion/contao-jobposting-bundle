@@ -2,10 +2,12 @@
 
 <?php $this->block('content'); ?>
 
-<?= $this->job ?>
+    <?php if ($this->hasJob): ?>
+        <?= $this->job ?>
 
-<?php if ($this->json): ?>
-    <script type="application/ld+json"><?= $this->json ?></script>
-<?php endif; ?>
+        <?php if ($this->json): ?>
+            <script type="application/ld+json"><?= $this->json ?></script>
+        <?php endif; ?>
+    <?php endif; ?>
 
 <?php $this->endblock(); ?>

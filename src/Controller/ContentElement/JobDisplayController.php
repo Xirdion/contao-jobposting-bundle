@@ -58,7 +58,8 @@ class JobDisplayController extends AbstractContentElementController
         }
 
         $template->hasJob = false;
-        // only show the job, if it is published
+
+        // Check if it is possible to show the job
         if ($job->published) {
             $page = $this->getPageModel();
             $this->jobParser->init($model, $page);
