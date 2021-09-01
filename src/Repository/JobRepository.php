@@ -49,7 +49,7 @@ abstract class JobRepository extends AbstractAliasRepository
 
         $table = static::$strTable;
         $columns = static::getSearchColumns($pIds);
-        $columns[] = $table . '.alias=?';
+        $columns[] = $table . '.alias = ?';
 
         return static::findOneBy($columns, $alias);
     }

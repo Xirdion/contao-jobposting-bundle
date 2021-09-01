@@ -310,7 +310,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'options_callback' => static function () {
                 return System::getCountries();
             },
-            'sql' => ['type' => 'string', 'length' => 2, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => 'string', 'length' => 64, 'notnull' => true, 'default' => ''],
         ],
         'remote' => [
             'exclude' => true,

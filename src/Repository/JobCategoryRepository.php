@@ -32,6 +32,27 @@ abstract class JobCategoryRepository extends AbstractAliasRepository
     }
 
     /**
+     * @param array $ids
+     * @param array $options
+     *
+     * @return JobCategoryModel[]|Model\Collection|null
+     */
+    public static function findByIds(array $ids, array $options = [])
+    {
+        if (empty($ids) || !\is_array($ids)) {
+            return null;
+        }
+
+        $t = static::$strTable;
+
+        if (!isset($options['order'])) {
+            $options['order'] = "$t.title";
+        }
+
+        return static::findBy(["$t.id IN (" . implode(',', array_map('intval', $ids)) . ')'], null, $options);
+    }
+
+    /**
      * Find all categories ordered by their titles.
      *
      * @param array $arrOptions
