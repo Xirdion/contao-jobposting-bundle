@@ -434,4 +434,16 @@ class JobModel extends JobRepository
 
         return $archive->getJumpTo();
     }
+
+    /**
+     * Check if the current job is actively accessible.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        $time = time();
+
+        return !(false === $this->isPublished() || ($this->getStart() && $this->getStart() > $time) || ($this->getStop() && $this->getStop() <= $time));
+    }
 }
