@@ -7,15 +7,15 @@ services:
     public: true
     arguments:
       - '@contao.image.image_sizes'
-      - '@job_posting.job.url_generator'
-      - '@job_posting.job.alias_generator'
+      - '@Dreibein\JobpostingBundle\Job\UrlGenerator'
+      - '@Dreibein\JobpostingBundle\Job\AliasGenerator'
       - '@translator'
 
   job_posting.event_listener.data_container.job_category_listener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener
     public: true
     arguments:
-      - '@job_posting.job.alias_generator'
+      - '@Dreibein\JobpostingBundle\Job\AliasGenerator'
 
   job_posting.event_listener.data_container.module_listener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener
@@ -28,4 +28,4 @@ services:
     class: Dreibein\JobpostingBundle\EventListener\InsertTagsListener
     arguments:
       - '@contao.framework'
-      - '@job_posting.job.url_generator'
+      - '@Dreibein\JobpostingBundle\Job\UrlGenerator'

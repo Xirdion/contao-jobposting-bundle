@@ -1,49 +1,46 @@
 services:
-  job_posting.content_element.job_display_controller:
+  Dreibein\JobpostingBundle\Controller\ContentElement\JobDisplayController:
     class: Dreibein\JobpostingBundle\Controller\ContentElement\JobDisplayController
     arguments:
-      - '@job_posting.job.job_parser'
-      - '@job_posting.job.json_parser'
+      - '@Dreibein\JobpostingBundle\Job\JobParser'
+      - '@Dreibein\JobpostingBundle\Job\JsonParser'
 
-  job_posting.frontend_module.job_list_controller:
+  Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController
     arguments:
-      - '@job_posting.job.job_parser'
+      - '@Dreibein\JobpostingBundle\Job\JobParser'
     tags:
       - { name: contao.frontend_module, category: jobs, type: job_list }
 
-  job_posting.frontend_module.job_reader_controller:
+  Dreibein\JobpostingBundle\Controller\FrontendModule\JobReaderController:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobReaderController
     arguments:
-      - '@job_posting.job.job_parser'
-      - '@job_posting.job.json_parser'
+      - '@Dreibein\JobpostingBundle\Job\JobParser'
+      - '@Dreibein\JobpostingBundle\Job\JsonParser'
     tags:
       - { name: contao.frontend_module, category: jobs, type: job_reader }
 
-  job_posting.job.alias_generator:
+  Dreibein\JobpostingBundle\Job\AliasGenerator:
     class: Dreibein\JobpostingBundle\Job\AliasGenerator
     arguments:
       - '@contao.slug'
 
-  Dreibein\JobpostingBundle\Job\AliasGenerator:
-    alias: 'job_posting.job.alias_generator'
-
-  job_posting.job.job_parser:
+  Dreibein\JobpostingBundle\Job\JobParser:
     class: Dreibein\JobpostingBundle\Job\JobParser
     arguments:
-      - '@job_posting.job.url_generator'
+      - '@Dreibein\JobpostingBundle\Job\UrlGenerator'
       - '%kernel.project_dir%'
 
-  job_posting.job.json_parser:
+  Dreibein\JobpostingBundle\Job\JsonParser:
     class: Dreibein\JobpostingBundle\Job\JsonParser
 
-  job_posting.job.url_generator:
+  Dreibein\JobpostingBundle\Job\UrlGenerator:
     class: Dreibein\JobpostingBundle\Job\UrlGenerator
     public: true
     arguments:
       - '@request_stack'
 
-  job_posting.picker.job_picker:
+  Dreibein\JobpostingBundle\Picker\JobPickerProvider:
     class: Dreibein\JobpostingBundle\Picker\JobPickerProvider
     arguments:
       - '@knp_menu.factory'
