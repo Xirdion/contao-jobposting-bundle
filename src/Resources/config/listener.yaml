@@ -1,8 +1,8 @@
 services:
-  job_posting.event_listener.add_job_content_config_listener:
+  Dreibein\JobpostingBundle\EventListener\DataContainer\AddJobContentConfigListener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\AddJobContentConfigListener
 
-  job_posting.event_listener.data_container.job_listener:
+  Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener
     public: true
     arguments:
@@ -11,20 +11,20 @@ services:
       - '@Dreibein\JobpostingBundle\Job\AliasGenerator'
       - '@translator'
 
-  job_posting.event_listener.data_container.job_category_listener:
+  Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener
     public: true
     arguments:
       - '@Dreibein\JobpostingBundle\Job\AliasGenerator'
 
-  job_posting.event_listener.data_container.module_listener:
+  Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\ModuleListener
     public: true
 
-  job_posting.event_listener.get_searchable_pages_listener:
+  Dreibein\JobpostingBundle\EventListener\GetSearchablePagesListener:
     class: Dreibein\JobpostingBundle\EventListener\GetSearchablePagesListener
 
-  job_posting.event_listener.insert_tags_listener:
+  Dreibein\JobpostingBundle\EventListener\InsertTagsListener:
     class: Dreibein\JobpostingBundle\EventListener\InsertTagsListener
     arguments:
       - '@contao.framework'
