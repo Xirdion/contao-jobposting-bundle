@@ -22,14 +22,21 @@ $GLOBALS['TL_DCA'][$table]['palettes']['job_display'] =
 
 $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
     'exclude' => true,
-    'inputType' => 'text',
+    'inputType' => 'jobPicker',
+    'foreignKey' => 'tl_job.title',
     'eval' => [
         'dcaPicker' => [
             'do' => 'jobs',
             'context' => 'job',
             'fieldType' => 'radio',
         ],
+        'fieldType' => 'radio',
+        'context' => 'job',
         'tl_class' => 'w50 wizard',
+    ],
+    'relation' => [
+        'type' => 'belongsToOne',
+        'load' => 'lazy',
     ],
     'sql' => ['mandatory' => true, 'type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Dreibein\JobpostingBundle\Picker;
 
-use Contao\CoreBundle\Picker\AbstractPickerProvider;
+use Contao\CoreBundle\Picker\AbstractInsertTagPickerProvider;
 use Contao\CoreBundle\Picker\DcaPickerProviderInterface;
 use Contao\CoreBundle\Picker\PickerConfig;
 use Contao\CoreBundle\ServiceAnnotation\PickerProvider;
@@ -20,53 +20,10 @@ use Contao\CoreBundle\ServiceAnnotation\PickerProvider;
 /**
  * @PickerProvider()
  */
-class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProviderInterface
+class JobPickerProvider extends AbstractInsertTagPickerProvider implements DcaPickerProviderInterface
 {
     /**
-     * Returns which DCA table this picker is for.
-     *
-     * @return string
-     */
-    public function getDcaTable(): string
-    {
-        return 'tl_job';
-    }
-
-    /**
-     * Returns attributes for the dca picker.
-     *
-     * @param PickerConfig $config
-     *
-     * @return string[]
-     */
-    public function getDcaAttributes(PickerConfig $config): array
-    {
-        $attributes = ['fieldType' => 'text'];
-
-        if ($fieldType = $config->getExtra('fieldType')) {
-            $attributes['fieldType'] = $fieldType;
-        }
-
-        if ($this->supportsValue($config)) {
-            $attributes['value'] = array_map('intval', explode(',', $config->getValue()));
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * @param PickerConfig $config
-     * @param $value
-     *
-     * @return int
-     */
-    public function convertDcaValue(PickerConfig $config, $value): int
-    {
-        return (int) $value;
-    }
-
-    /**
-     * Returns the name of the picker.
+     * Get the internal name of the picker.
      *
      * @return string
      */
@@ -76,7 +33,7 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
     }
 
     /**
-     * Check if the context is supported for this picker.
+     * Only a specific context is support by this picker.
      *
      * @param string $context
      *
@@ -88,7 +45,7 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
     }
 
     /**
-     * Check if the value is supported.
+     * Check if a given value is supported by the picker.
      *
      * @param PickerConfig $config
      *
@@ -96,17 +53,81 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
      */
     public function supportsValue(PickerConfig $config): bool
     {
-        foreach (explode(',', $config->getValue()) as $id) {
-            if (!is_numeric($id)) {
-                return false;
-            }
+        if ('job' === $config->getContext()) {
+            return is_numeric($config->getValue());
         }
 
-        return true;
+        return $this->isMatchingInsertTag($config);
     }
 
     /**
-     * Get the route parameters for the picker.
+     * Get the database table for the dca picker.
+     *
+     * @return string
+     */
+    public function getDcaTable(): string
+    {
+        return 'tl_job';
+    }
+
+    /**
+     * Set some attributes for the picker.
+     *
+     * @param PickerConfig $config
+     *
+     * @return string[]
+     */
+    public function getDcaAttributes(PickerConfig $config): array
+    {
+        $value = $config->getValue();
+        $attributes = ['fieldType' => 'radio'];
+
+        if ('job' === $config->getContext()) {
+            if ($fieldType = $config->getExtra('fieldType')) {
+                $attributes['fieldType'] = $fieldType;
+            }
+
+            if ($source = $config->getExtra('source')) {
+                $attributes['preserveRecord'] = $source;
+            }
+
+            if ($value) {
+                $attributes['value'] = array_map('\intval', explode(',', $value));
+            }
+
+            return $attributes;
+        }
+
+        if ($value && $this->isMatchingInsertTag($config)) {
+            $attributes['value'] = $this->getInsertTagValue($config);
+
+            if ($flags = $this->getInsertTagFlags($config)) {
+                $attributes['flags'] = $flags;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Converting the given picker value to the correct id or insert-tag.
+     *
+     * @param PickerConfig $config
+     * @param $value
+     *
+     * @return int|string
+     */
+    public function convertDcaValue(PickerConfig $config, $value)
+    {
+        if ('job' === $config->getContext()) {
+            return (int) $value;
+        }
+
+        return sprintf($this->getInsertTag($config), $value);
+    }
+
+    /**
+     * Add some specific route parameters.
      *
      * @param PickerConfig|null $config
      *
@@ -115,5 +136,15 @@ class JobPickerProvider extends AbstractPickerProvider implements DcaPickerProvi
     protected function getRouteParameters(PickerConfig $config = null): array
     {
         return ['do' => 'jobs'];
+    }
+
+    /**
+     * Get the default insert tag for the picker value.
+     *
+     * @return string
+     */
+    protected function getDefaultInsertTag(): string
+    {
+        return '{{job_url::%s}}';
     }
 }

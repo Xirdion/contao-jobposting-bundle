@@ -15,8 +15,10 @@ namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
 use Contao\BackendUser;
 use Contao\Config;
 use Contao\Controller;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Image\ImageSizes;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\Input;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use DateTimeImmutable;
@@ -28,17 +30,50 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JobListener extends AbstractDcaListener
 {
-    private ImageSizes $imageSizes;
     private UrlGenerator $urlGenerator;
+    private ImageSizes $imageSizes;
+    private ContaoFramework $framework;
     private TranslatorInterface $translator;
 
-    public function __construct(ImageSizes $imageSizes, UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator, TranslatorInterface $translator)
+    public function __construct(UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator, ImageSizes $imageSizes, ContaoFramework $framework, TranslatorInterface $translator)
     {
         parent::__construct($aliasGenerator);
 
-        $this->imageSizes = $imageSizes;
         $this->urlGenerator = $urlGenerator;
+        $this->imageSizes = $imageSizes;
+        $this->framework = $framework;
         $this->translator = $translator;
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.categories.options")
+     *
+     * @return array
+     */
+    public function getCategoryOptions(): array
+    {
+        $data = [];
+        $input = $this->framework->getAdapter(Input::class);
+
+        // Do not generate the options for other views than listings
+        if ($input->get('act') && 'select' !== $input->get('act')) {
+            return $data;
+        }
+
+        // Load all categories from the database
+        $categoryModel = $this->framework->getAdapter(JobCategoryModel::class);
+        $categories = $categoryModel->findAll();
+
+        if (null === $categories) {
+            return $data;
+        }
+
+        /** @var JobCategoryModel $category */
+        foreach ($categories as $category) {
+            $data[$category->getId()] = $category->getTitle();
+        }
+
+        return $data;
     }
 
     /**
@@ -55,6 +90,46 @@ class JobListener extends AbstractDcaListener
         }
 
         return (int) $dateTime;
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.date.load")
+     *
+     * @param $dateTime
+     *
+     * @return int
+     */
+    public function loadJobDate($dateTime): int
+    {
+        $date = new DateTimeImmutable();
+        if (0 !== (int) $dateTime) {
+            $date = $date->setTimestamp((int) $dateTime);
+        }
+
+        // Set the time to 00:00:00
+        $date = $date->setTime(0, 0, 0);
+
+        return $date->getTimestamp();
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.time.load")
+     *
+     * @param $time
+     *
+     * @return int
+     */
+    public function loadJobTime($time): int
+    {
+        $date = new DateTimeImmutable();
+        if (0 !== (int) $time) {
+            $date = $date->setTimestamp((int) $time);
+        }
+
+        // Set date to 1970-01-01
+        $date = $date->setDate(1970, 1, 1);
+
+        return $date->getTimestamp();
     }
 
     /**
@@ -75,26 +150,6 @@ class JobListener extends AbstractDcaListener
     }
 
     /**
-     * @Callback(table="tl_job", target="fields.categories.options")
-     *
-     * @return array
-     */
-    public function getCategoryOptions(): array
-    {
-        $categories = JobCategoryModel::findAll();
-        if (null === $categories) {
-            return [];
-        }
-
-        $data = [];
-        foreach ($categories as $category) {
-            $data[$category->getId()] = $category->getTitle();
-        }
-
-        return $data;
-    }
-
-    /**
      * @Callback(table="tl_job", target="list.operations.toggle.button")
      *
      * @param array       $record
@@ -106,9 +161,30 @@ class JobListener extends AbstractDcaListener
      *
      * @return string
      */
-    public function updateToggleButton(array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
+    public function updatePublishedButton(array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
     {
-        return $this->setToggleButton('tl_job', $record, $href, $label, $title, $icon, $attributes);
+        $this->setToggleData('published', 'toggle', 'tl_job', 'visible.svg', 'invisible.svg');
+
+        return $this->setToggleButton($record, $href, $label, $title, $icon, $attributes);
+    }
+
+    /**
+     * @Callback(table="tl_job", target="list.operations.feature.button")
+     *
+     * @param array       $record
+     * @param string|null $href
+     * @param string      $label
+     * @param string      $title
+     * @param string|null $icon
+     * @param string      $attributes
+     *
+     * @return string
+     */
+    public function updateFeaturedButton(array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
+    {
+        $this->setToggleData('featured', 'feature', 'tl_job', 'featured.svg', 'featured_.svg');
+
+        return $this->setToggleButton($record, $href, $label, $title, $icon, $attributes);
     }
 
     /**

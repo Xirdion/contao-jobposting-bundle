@@ -6,9 +6,10 @@ services:
     class: Dreibein\JobpostingBundle\EventListener\DataContainer\JobListener
     public: true
     arguments:
-      - '@contao.image.image_sizes'
       - '@Dreibein\JobpostingBundle\Job\UrlGenerator'
       - '@Dreibein\JobpostingBundle\Job\AliasGenerator'
+      - '@contao.image.image_sizes'
+      - '@contao.framework'
       - '@translator'
 
   Dreibein\JobpostingBundle\EventListener\DataContainer\JobCategoryListener:
@@ -29,3 +30,8 @@ services:
     arguments:
       - '@contao.framework'
       - '@Dreibein\JobpostingBundle\Job\UrlGenerator'
+
+  Dreibein\JobpostingBundle\EventListener\ExecutePostActionsListener:
+    class: Dreibein\JobpostingBundle\EventListener\ExecutePostActionsListener
+    arguments:
+      - '@contao.framework'

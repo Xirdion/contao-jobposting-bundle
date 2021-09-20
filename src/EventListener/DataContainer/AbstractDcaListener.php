@@ -28,6 +28,8 @@ abstract class AbstractDcaListener
 {
     protected AliasGenerator $aliasGenerator;
 
+    protected array $toggleData;
+
     public function __construct(AliasGenerator $aliasGenerator)
     {
         $this->aliasGenerator = $aliasGenerator;
@@ -69,8 +71,20 @@ abstract class AbstractDcaListener
         return $newAlias;
     }
 
+    public function setToggleData(string $field, string $act, string $table, string $icon, string $icon_inactive): void
+    {
+        $this->toggleData = [
+            'field' => $field,
+            'act' => $act,
+            'table' => $table,
+            'icon' => $icon,
+            'icon_inactive' => $icon_inactive,
+        ];
+    }
+
     /**
-     * @param string      $table
+     * Function to set the ulr and icon of the button. The button-action is also handled here.
+     *
      * @param array       $record
      * @param string|null $href
      * @param string      $label
@@ -80,45 +94,49 @@ abstract class AbstractDcaListener
      *
      * @return string
      */
-    public function setToggleButton(string $table, array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
+    public function setToggleButton(array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
     {
-        if (Input::get('tid')) {
-            $this->toggleVisibility($table, (int) Input::get('tid'), (1 === (int) Input::get('state')));
+        $field = $this->toggleData['field'];
+        $table = $this->toggleData['table'];
+        $actionId = $this->toggleData['act'][0] . 'id';
+
+        if (Input::get($actionId)) {
+            $this->toggleField((int) Input::get($actionId), (1 === (int) Input::get('state')));
             Controller::redirect(Controller::getReferer());
         }
 
-        // Check permissions AFTER checking the tid, so hacking attempts are logged
+        // Check permissions AFTER checking the action-id, so hacking attempts are logged
         $user = BackendUser::getInstance();
-        if (!$user->hasAccess($table . '::published', 'alexf')) {
+        if (!$user->hasAccess($table . '::' . $field, 'alexf')) {
             return '';
         }
 
-        $href .= '&amp;tid=' . $record['id'] . '&amp;state=' . ($record['published'] ? '' : 1);
+        $href .= '&amp;' . $actionId . '=' . $record['id'] . '&amp;state=' . ($record[$field] ? '' : 1);
 
-        if (!$record['published']) {
-            $icon = 'invisible.svg';
-        }
+        $btnIcon = !$record[$field] ? $this->toggleData['icon_inactive'] : $this->toggleData['icon'];
 
-        return '<a href="' . Controller::addToUrl($href) . '" title="' . StringUtil::specialchars($title) . '"' . $attributes . '>' . Image::getHtml($icon, $label, 'data-state="' . ($record['published'] ? 1 : 0) . '"') . '</a> ';
+        return '<a href="' . Controller::addToUrl($href) . '" title="' . StringUtil::specialchars($title) . '"' . $attributes . '>' . Image::getHtml($btnIcon, $label, 'data-state="' . ($record[$field] ? 1 : 0) . '"') . '</a> ';
     }
 
     /**
-     * Update the published field for the given job category.
+     * Update the field value (boolean).
      *
-     * @param string $table
-     * @param int    $id
-     * @param bool   $published
+     * @param int  $id
+     * @param bool $toggled
      */
-    private function toggleVisibility(string $table, int $id, bool $published): void
+    private function toggleField(int $id, bool $toggled): void
     {
+        $field = $this->toggleData['field'];
+        $table = $this->toggleData['table'];
+
         // Set the ID and action
         Input::setGet('id', $id);
-        Input::setGet('act', 'toggle');
+        Input::setGet('act', $this->toggleData['act']);
 
         // Check the field access
         $user = BackendUser::getInstance();
-        if (!$user->hasAccess($table . '::published', 'alexf')) {
-            throw new AccessDeniedException('Not enough permissions to publish/unpublish ' . $table . ' ID "' . $id . '".');
+        if (!$user->hasAccess($table . '::' . $field, 'alexf')) {
+            throw new AccessDeniedException('Not enough permissions to update ' . $table . ' ID "' . $id . '".');
         }
 
         // Check if the category could get loaded
@@ -131,7 +149,7 @@ abstract class AbstractDcaListener
 
         // Update the database
         $model->tstamp = time();
-        $model->published = $published;
+        $model->{$field} = $toggled;
         $model->save();
     }
 }

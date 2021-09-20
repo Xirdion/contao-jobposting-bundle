@@ -45,3 +45,9 @@ services:
     arguments:
       - '@knp_menu.factory'
       - '@router'
+
+  Dreibein\JobpostingBundle\Picker\JobCategoryPickerProvider:
+    class: Dreibein\JobpostingBundle\Picker\JobCategoryPickerProvider
+    arguments:
+      - '@knp_menu.factory'
+      - '@router'

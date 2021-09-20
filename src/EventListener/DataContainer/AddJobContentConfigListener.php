@@ -16,19 +16,18 @@ use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\Input;
 
-/**
- * @Callback(table="tl_content", target="config.onload")
- */
 class AddJobContentConfigListener
 {
     private string $table = 'tl_content';
 
-    public function __construct()
-    {
-        $a = 0;
-    }
-
-    public function __invoke(DataContainer $dc): void
+    /**
+     * Dynamically set the ptable of tl_content.
+     *
+     * @Callback(table="tl_content", target="config.onload")
+     *
+     * @param DataContainer $dc
+     */
+    public function loadContentDca(DataContainer $dc): void
     {
         if ('jobs' === Input::get('do')) {
             $GLOBALS['TL_DCA'][$this->table]['config']['ptable'] = 'tl_job';

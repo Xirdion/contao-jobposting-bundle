@@ -36,10 +36,13 @@ $GLOBALS['TL_DCA'][$table] = [
 
     'list' => [
         'sorting' => [
-            'mode' => 4,
-            'fields' => ['dateTime'],
-            'headerFields' => ['title', 'jumpTo', 'tstamp'],
-            'panelLayout' => 'filter;search,limit',
+            'mode' => 2,
+            'fields' => ['title'],
+            'panelLayout' => 'filter;search,sort,limit',
+        ],
+        'label' => [
+            'fields' => ['title', 'date'],
+            'showColumns' => true,
         ],
         'global_operations' => [
             'all' => [
@@ -68,8 +71,9 @@ $GLOBALS['TL_DCA'][$table] = [
             ],
             'toggle' => [
                 'icon' => 'visible.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'showInHeader' => true,
+            ],
+            'feature' => [
+                'icon' => 'featured.svg',
             ],
             'show' => [
                 'href' => 'act=show',
@@ -82,15 +86,15 @@ $GLOBALS['TL_DCA'][$table] = [
         '__selector__' => ['addImage', 'overwriteMeta'],
         'default' => '{title_legend},title,alias;'
                     . '{category_legend},categories;'
-                    . '{date_legend},dateTime;'
-                    . '{meta_legend},serpPreview;'
+                    . '{date_legend},date,time;'
+                    . '{meta_legend},pageTitle,description,serpPreview;'
                     . '{teaser_legend},teaser;'
                     . '{image_legend},addImage;'
                     . '{company_legend},company,companyUrl,companyLogo;'
                     . '{job_legend},type,times,postal,city,street,region,country,remote;'
                     . '{salary_legend},salary,salaryInterval;'
                     . '{conditions_legend},responsibility,skills,qualification,education,experience;'
-                    . '{expert_legend:hide},cssClass;'
+                    . '{expert_legend:hide},cssClass,featured;'
                     . '{publish_legend},published,start,stop',
     ],
 
@@ -129,18 +133,56 @@ $GLOBALS['TL_DCA'][$table] = [
         'categories' => [
             'exclude' => true,
             'filter' => true,
-            'inputType' => 'select',
-            'eval' => ['multiple' => true, 'chosen' => true, 'tl_class' => 'w50'],
+            'inputType' => 'jobCategoryPicker', // use custom dca-picker-widget
+            'foreignKey' => 'tl_job_category.title',
+            'eval' => [
+                'dcaPicker' => [
+                    'do' => 'jobs', // BE_MOD
+                    'context' => 'jobCategory', // internal context
+                    'fieldType' => 'checkbox',
+                ],
+                'context' => 'jobCategory',
+                'fieldType' => 'checkbox',
+                'multiple' => true,
+                'tl_class' => 'w50 wizard',
+            ],
+            'relation' => [
+                'type' => 'belongsToMany',
+                'load' => 'lazy',
+            ],
             'sql' => ['type' => 'blob', 'notnull' => false],
         ],
-        'dateTime' => [
+
+        'date' => [
             'exclude' => true,
             'filter' => true,
             'sorting' => true,
             'flag' => 8,
             'inputType' => 'text',
-            'eval' => ['rgxp' => 'datim', 'mandatory' => true, 'doNotCopy' => true, 'datepicker' => true, 'tl_class' => 'w50 wizard'],
+            'eval' => ['rgxp' => 'date', 'mandatory' => true, 'doNotCopy' => true, 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+        ],
+        'time' => [
+            'default' => time(),
+            'exclude' => true,
+            'filter' => true,
+            'sorting' => true,
+            'flag' => 8,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'time', 'mandatory' => true, 'doNotCopy' => true, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+        ],
+        'pageTitle' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'decodeEntities' => true, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
+        'description' => [
+            'exclude' => true,
+            'inputType' => 'textarea',
+            'eval' => ['style' => 'height:60px', 'decodeEntities' => true, 'tl_class' => 'clr'],
+            'sql' => ['type' => 'text', 'notnull' => false],
         ],
         'serpPreview' => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['serpPreview'],

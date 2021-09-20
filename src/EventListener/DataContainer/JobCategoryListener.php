@@ -30,6 +30,8 @@ class JobCategoryListener extends AbstractDcaListener
      */
     public function updateToggleButton(array $record, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
     {
-        return $this->setToggleButton('tl_job_category', $record, $href, $label, $title, $icon, $attributes);
+        $this->setToggleData('published', 'toggle', 'tl_job_category', 'visible.svg', 'invisible.svg');
+
+        return $this->setToggleButton($record, $href, $label, $title, $icon, $attributes);
     }
 }

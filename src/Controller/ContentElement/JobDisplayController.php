@@ -48,13 +48,13 @@ class JobDisplayController extends AbstractContentElementController
         // Get the id of the job to display
         $jobId = (int) $model->job_id;
         if (0 === $jobId) {
-            throw new \Exception(sprintf('"%s" is not a valid job id!', $jobId));
+            return null;
         }
 
         // Check if the id is a valid job id
         $job = JobModel::findById($jobId);
         if (!$job) {
-            throw new \Exception(sprintf('Job with id "%s" not found!', $jobId));
+            return null;
         }
 
         $template->hasJob = false;
