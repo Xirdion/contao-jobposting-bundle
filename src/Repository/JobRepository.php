@@ -78,10 +78,10 @@ abstract class JobRepository extends AbstractAliasRepository
         $table = static::$strTable;
         switch ($order) {
             case 'order_date_asc':
-                $order = $table . '.dateTime ASC';
+                $order = $table . '.date ASC';
                 break;
             case 'order_date_desc':
-                $order = $table . '.dateTime DESC';
+                $order = $table . '.date DESC';
                 break;
             case 'order_title_asc':
                 $order = $table . '.title ASC';
@@ -93,7 +93,7 @@ abstract class JobRepository extends AbstractAliasRepository
                 $order = 'RAND()';
                 break;
             default:
-                $order = $table . '.dateTime DESC';
+                $order = $table . '.date DESC';
         }
 
         $options = [

@@ -77,22 +77,6 @@ class JobListener extends AbstractDcaListener
     }
 
     /**
-     * @Callback(table="tl_job", target="fields.dateTime.load")
-     *
-     * @param $dateTime
-     *
-     * @return int
-     */
-    public function loadDateTimeField($dateTime): int
-    {
-        if (0 === (int) $dateTime) {
-            return (new DateTimeImmutable())->getTimestamp();
-        }
-
-        return (int) $dateTime;
-    }
-
-    /**
      * @Callback(table="tl_job", target="fields.date.load")
      *
      * @param $dateTime
@@ -199,9 +183,9 @@ class JobListener extends AbstractDcaListener
         $html = '<div class="tl_content_left">%s <span style="color: #999;padding-left: 3px;">%s</span></div>';
 
         $date = new \DateTimeImmutable();
-        $date = $date->setTimestamp((int) $record['dateTime']);
+        $date = $date->setTimestamp((int) $record['date']);
 
-        return sprintf($html, $record['title'], $date->format(Config::get('datimFormat')));
+        return sprintf($html, $record['title'], $date->format(Config::get('dateFormat')));
     }
 
     /**

@@ -167,9 +167,9 @@ class JobParser
         };
 
         $dateimFormat = $this->page->datimFormat ?? 'd.m.Y';
-        $template->date = Date::parse($dateimFormat, $job->getDateTime());
-        $template->timestamp = $job->getDateTime();
-        $template->datetime = date('Y-m-d\TH:i:sP', $job->getDateTime());
+        $template->date = Date::parse($dateimFormat, $job->getDate());
+        $template->timestamp = $job->getDate();
+        $template->datetime = date('Y-m-d\TH:i:sP', $job->getDate());
 
         // location
         $template->street = $job->getStreet();

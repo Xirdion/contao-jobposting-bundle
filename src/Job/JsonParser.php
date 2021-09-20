@@ -39,7 +39,7 @@ class JsonParser
             ],
             'title' => $job->getTitle(),
             'description' => htmlspecialchars($job->getTeaser()),
-            'datePosted' => ($date->setTimestamp($job->getDateTime()))->format('Y-m-d'),
+            'datePosted' => ($date->setTimestamp($job->getDate()))->format('Y-m-d'),
         ];
 
         if ($job->getStop()) {

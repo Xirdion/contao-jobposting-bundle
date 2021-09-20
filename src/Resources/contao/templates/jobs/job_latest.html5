@@ -1,6 +1,6 @@
 <div class="layout_latest layout_latest_job arc_<?= $this->archive->getId() ?> block<?= $this->class ?>" itemscope itemtype="https://schema.org/JobPosting">
     <div class="inside">
-        <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePosted"><?= $this->date ?></time></p>
+        <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePosted"><?= $this->datetime ?></time></p>
 
         <?php if ($this->addImage): ?>
             <?php $this->insert('image', $this->arrData); ?>

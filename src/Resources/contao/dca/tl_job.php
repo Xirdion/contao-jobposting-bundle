@@ -152,7 +152,6 @@ $GLOBALS['TL_DCA'][$table] = [
             ],
             'sql' => ['type' => 'blob', 'notnull' => false],
         ],
-
         'date' => [
             'exclude' => true,
             'filter' => true,

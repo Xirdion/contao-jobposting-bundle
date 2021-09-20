@@ -3,7 +3,7 @@
 
         <h1 class="headline h1" itemprop="title"><?= $this->headline ?></h1>
 
-        <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePosted"><?= $this->date ?></time></p>
+        <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="datePosted"><?= $this->datetime ?></time></p>
 
         <div class="categories">
             <ul>

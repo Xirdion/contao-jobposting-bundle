@@ -24,7 +24,8 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  * @property string $title
  * @property string $alias
  * @property string $categories
- * @property int    $dateTime
+ * @property int    $date
+ * @property int    $time
  * @property string $teaser
  * @property string $company
  * @property string $companyUrl
@@ -135,9 +136,17 @@ class JobModel extends JobRepository
     /**
      * @return int
      */
-    public function getDateTime(): int
+    public function getDate(): int
     {
-        return (int) $this->dateTime;
+        return (int) $this->date;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTime(): int
+    {
+        return (int) $this->time;
     }
 
     /**
