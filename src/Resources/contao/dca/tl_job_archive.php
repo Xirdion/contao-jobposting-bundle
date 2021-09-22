@@ -90,6 +90,13 @@ $GLOBALS['TL_DCA'][$table] = [
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
+        'frontendTitle' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
         'jumpTo' => [
             'exclude' => true,
             'inputType' => 'pageTree',

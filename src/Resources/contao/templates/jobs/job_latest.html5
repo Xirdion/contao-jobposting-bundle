@@ -11,7 +11,7 @@
         <div class="categories">
             <ul>
                 <?php foreach ($this->categories as $category): ?>
-                    <li><?= $category->getTitle() ?></li>
+                    <li><?= $category->getFrontendTitle() ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>

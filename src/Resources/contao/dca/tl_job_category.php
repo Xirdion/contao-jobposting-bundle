@@ -92,14 +92,14 @@ $GLOBALS['TL_DCA'][$table] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'alias' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['rgxp' => 'alias', 'unique' => true, 'spaceToUnderscore' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
+            'eval' => ['rgxp' => 'alias', 'unique' => true, 'spaceToUnderscore' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'description' => [

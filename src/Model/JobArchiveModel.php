@@ -19,6 +19,7 @@ use Dreibein\JobpostingBundle\Repository\JobArchiveRepository;
  *
  * @property int    $tstamp
  * @property string $title
+ * @property string $frontendTitle
  * @property int    $jumpTo
  */
 class JobArchiveModel extends JobArchiveRepository
@@ -45,6 +46,14 @@ class JobArchiveModel extends JobArchiveRepository
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrontendTitle(): string
+    {
+        return $this->frontendTitle ?: $this->title;
     }
 
     /**

@@ -58,7 +58,7 @@ class JobCategoryModel extends JobCategoryRepository
      */
     public function getFrontendTitle(): string
     {
-        return $this->frontendTitle;
+        return $this->frontendTitle ?: $this->title;
     }
 
     /**
