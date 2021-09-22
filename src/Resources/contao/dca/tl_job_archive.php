@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
 
     'palettes' => [
-        'default' => '{title_legend},title,jumpTo;',
+        'default' => '{title_legend},title,frontendTitle,jumpTo;',
     ],
     'fields' => [
         'id' => [
