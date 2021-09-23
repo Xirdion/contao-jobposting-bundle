@@ -9,6 +9,7 @@ services:
     class: Dreibein\JobpostingBundle\Controller\FrontendModule\JobListController
     arguments:
       - '@Dreibein\JobpostingBundle\Job\JobParser'
+      - '@contao.framework'
     tags:
       - { name: contao.frontend_module, category: jobs, type: job_list }
 

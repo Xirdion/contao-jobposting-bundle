@@ -15,7 +15,9 @@ namespace Dreibein\JobpostingBundle\Controller\FrontendModule;
 use Contao\Config;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
+use Contao\Model\Collection;
 use Contao\ModuleModel;
 use Contao\Pagination;
 use Contao\StringUtil;
@@ -27,11 +29,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class JobListController extends AbstractFrontendModuleController
 {
-    private JobParser $jobParser;
+    protected JobParser $jobParser;
+    protected ContaoFramework $framework;
 
-    public function __construct(JobParser $jobParser)
+    /**
+     * @var JobModel[]|Collection|null
+     */
+    protected ?Collection $jobs;
+
+    public function __construct(JobParser $jobParser, ContaoFramework $framework)
     {
+        $this->framework = $framework;
         $this->jobParser = $jobParser;
+        $this->jobs = null;
     }
 
     /**
@@ -51,7 +61,9 @@ class JobListController extends AbstractFrontendModuleController
 
         // Check if there are any published jobs within the archives
         $jobArchives = StringUtil::deserialize($model->job_archives, true);
-        $totalJobs = JobModel::countPublishedByPids($jobArchives);
+
+        $jobAdapter = $this->framework->getAdapter(JobModel::class);
+        $totalJobs = $jobAdapter->countPublishedByPids($jobArchives);
         if ($totalJobs < 1) {
             return $template->getResponse();
         }
@@ -94,10 +106,10 @@ class JobListController extends AbstractFrontendModuleController
         }
 
         // Find all jobs for the current page
-        $jobs = JobModel::findPublishedByPids($jobArchives, $limit, $offset, $model->job_order);
-        if (null !== $jobs) {
+        $this->jobs = $jobAdapter->findPublishedByPids($jobArchives, $limit, $offset, $model->job_order);
+        if (null !== $this->jobs) {
             $this->jobParser->init($model, $page);
-            $template->jobs = $this->jobParser->parseJobs($jobs);
+            $template->jobs = $this->jobParser->parseJobs($this->jobs);
         }
 
         return $template->getResponse();
