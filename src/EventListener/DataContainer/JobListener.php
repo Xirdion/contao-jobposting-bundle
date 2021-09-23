@@ -18,6 +18,7 @@ use Contao\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Image\ImageSizes;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\DataContainer;
 use Contao\Input;
 use Contao\LayoutModel;
 use Contao\PageModel;
@@ -43,6 +44,50 @@ class JobListener extends AbstractDcaListener
         $this->imageSizes = $imageSizes;
         $this->framework = $framework;
         $this->translator = $translator;
+    }
+
+    /**
+     * @Callback(table="tl_job", target="fields.apply_inactive_link.load")
+     * @Callback(table="tl_job", target="fields.apply_inactive_text.load")
+     *
+     * @param string|null   $value
+     * @param DataContainer $dc
+     *
+     * @return string
+     */
+    public function loadDefaultApplyInactiveValue(?string $value, DataContainer $dc): ?string
+    {
+        // Check if there is already a value in the database
+        if ($value) {
+            return $value;
+        }
+
+        if (null === $dc->activeRecord) {
+            return $value;
+        }
+
+        // Load the job model
+        $jobModel = $this->framework->getAdapter(JobModel::class);
+        $job = $jobModel->findById((int) $dc->id);
+        if (null === $job) {
+            return $value;
+        }
+
+        // Load the job archive model
+        $archive = $job->getArchive();
+        if (null === $archive) {
+            return $value;
+        }
+
+        // Select the correct function to load the field specific value
+        switch ($dc->field) {
+            case 'apply_inactive_link':
+                return $archive->getApplyInactiveLink();
+            case 'apply_inactive_text':
+                return $archive->getApplyInactiveText();
+        }
+
+        return $value;
     }
 
     /**
@@ -216,14 +261,16 @@ class JobListener extends AbstractDcaListener
         }
 
         // Try to load the forwarding page of the archive
-        $page = PageModel::findById($archive->getJumpTo());
+        $pageModel = $this->framework->getAdapter(PageModel::class);
+        $page = $pageModel->findById($archive->getJumpTo());
         if (null === $page) {
             return '';
         }
 
         // Load the layout of the page
         $page->loadDetails();
-        $layout = LayoutModel::findById((int) $page->layoutId);
+        $layoutModel = $this->framework->getAdapter(LayoutModel::class);
+        $layout = $layoutModel->findById((int) $page->layoutId);
         if (null === $layout) {
             return '';
         }

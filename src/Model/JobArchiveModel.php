@@ -17,10 +17,12 @@ use Dreibein\JobpostingBundle\Repository\JobArchiveRepository;
 /**
  * Class JobArchiveModel.
  *
- * @property int    $tstamp
- * @property string $title
- * @property string $frontendTitle
- * @property int    $jumpTo
+ * @property int     $tstamp
+ * @property string  $title
+ * @property string  $frontendTitle
+ * @property int     $jumpTo
+ * @property string  $apply_inactive_link
+ * @property ?string $apply_inactive_text
  */
 class JobArchiveModel extends JobArchiveRepository
 {
@@ -62,5 +64,21 @@ class JobArchiveModel extends JobArchiveRepository
     public function getJumpTo(): int
     {
         return (int) $this->jumpTo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyInactiveLink(): string
+    {
+        return $this->apply_inactive_link;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApplyInactiveText(): ?string
+    {
+        return $this->apply_inactive_text;
     }
 }

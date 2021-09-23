@@ -28,6 +28,11 @@ class JsonParser
      */
     public function parseJob(JobModel $job): string
     {
+        // Do not generate the json-data if you can not apply for the job
+        if (false === $job->isApplyActive()) {
+            return '';
+        }
+
         $date = new \DateTimeImmutable();
         $this->job = $job;
         $this->json = [

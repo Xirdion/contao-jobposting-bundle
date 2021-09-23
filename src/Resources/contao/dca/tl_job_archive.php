@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
 
     'palettes' => [
-        'default' => '{title_legend},title,frontendTitle,jumpTo;',
+        'default' => '{title_legend},title,frontendTitle,jumpTo;{apply_legend},apply_inactive_link,apply_inactive_text;',
     ],
     'fields' => [
         'id' => [
@@ -104,6 +104,19 @@ $GLOBALS['TL_DCA'][$table] = [
             'eval' => ['mandatory' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
             'sql' => ['type' => 'integer', 'default' => 0, 'notnull' => true],
+        ],
+        'apply_inactive_link' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'url', 'tl_class' => 'w50'],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
+        'apply_inactive_text' => [
+            'exclude' => true,
+            'inputType' => 'textarea',
+            'eval' => ['rte' => 'tinyMCE', 'helpwizard' => true, 'tl_class' => 'clr'],
+            'explanation' => 'insertTags',
+            'sql' => ['type' => 'text', 'notnull' => false],
         ],
     ],
 ];

@@ -19,48 +19,52 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
 /**
  * Class JobModel.
  *
- * @property int    $pid
- * @property int    $tstamp
- * @property string $title
- * @property string $alias
- * @property string $categories
- * @property int    $date
- * @property int    $time
- * @property string $teaser
- * @property string $company
- * @property string $companyUrl
- * @property string $companyLogo
- * @property string $type
- * @property string $times
- * @property string $postal
- * @property string $city
- * @property string $street
- * @property string $region
- * @property string $country
- * @property bool   $remote
- * @property string $salary
- * @property string $salaryInterval
- * @property string $responsibility
- * @property string $skills
- * @property string $qualification
- * @property string $education
- * @property string $experience
- * @property bool   $addImage
- * @property string $singleSRC
- * @property string $size
- * @property string $floating
- * @property string $imagemargin
- * @property bool   $fullsize
- * @property bool   $overwriteMeta
- * @property string $alt
- * @property string $imageTitle
- * @property string $imageUrl
- * @property string $caption
- * @property string $cssClass
- * @property bool   $featured
- * @property bool   $published
- * @property int    $start
- * @property int    $stop
+ * @property int     $pid
+ * @property int     $tstamp
+ * @property string  $title
+ * @property string  $alias
+ * @property string  $categories
+ * @property int     $date
+ * @property int     $time
+ * @property string  $teaser
+ * @property string  $company
+ * @property string  $companyUrl
+ * @property string  $companyLogo
+ * @property string  $type
+ * @property string  $times
+ * @property string  $postal
+ * @property string  $city
+ * @property string  $street
+ * @property string  $region
+ * @property string  $country
+ * @property bool    $remote
+ * @property string  $salary
+ * @property string  $salaryInterval
+ * @property string  $responsibility
+ * @property string  $skills
+ * @property string  $qualification
+ * @property string  $education
+ * @property string  $experience
+ * @property bool    $addImage
+ * @property string  $singleSRC
+ * @property string  $size
+ * @property string  $floating
+ * @property string  $imagemargin
+ * @property bool    $fullsize
+ * @property bool    $overwriteMeta
+ * @property string  $alt
+ * @property string  $imageTitle
+ * @property string  $imageUrl
+ * @property string  $caption
+ * @property bool    $apply_active
+ * @property string  $apply_link
+ * @property string  $apply_inactive_link
+ * @property ?string $apply_inactive_text
+ * @property string  $cssClass
+ * @property bool    $featured
+ * @property bool    $published
+ * @property int     $start
+ * @property int     $stop
  */
 class JobModel extends JobRepository
 {
@@ -387,6 +391,38 @@ class JobModel extends JobRepository
     public function getExperience(): string
     {
         return $this->experience;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApplyActive(): bool
+    {
+        return (bool) $this->apply_active;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyLink(): string
+    {
+        return $this->apply_link;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyInactiveLink(): string
+    {
+        return $this->apply_inactive_link;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApplyInactiveText(): ?string
+    {
+        return $this->apply_inactive_text;
     }
 
     /**

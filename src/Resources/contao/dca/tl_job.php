@@ -94,6 +94,7 @@ $GLOBALS['TL_DCA'][$table] = [
                     . '{job_legend},type,times,postal,city,street,region,country,remote;'
                     . '{salary_legend},salary,salaryInterval;'
                     . '{conditions_legend},responsibility,skills,qualification,education,experience;'
+                    . '{apply_legend},apply_active,apply_link,apply_inactive_link,apply_inactive_text;'
                     . '{expert_legend:hide},cssClass,featured;'
                     . '{publish_legend},published,start,stop',
     ],
@@ -408,6 +409,31 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+        ],
+        'apply_active' => [
+            'exclude' => true,
+            'inputType' => 'checkbox',
+            'eval' => ['tl_class' => 'w50'],
+            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+        ],
+        'apply_link' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['unique' => true, 'rgxp' => 'url', 'tl_class' => 'w50 clr'],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
+        'apply_inactive_link' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'url', 'tl_class' => 'w50'],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+        ],
+        'apply_inactive_text' => [
+            'exclude' => true,
+            'inputType' => 'textarea',
+            'eval' => ['rte' => 'tinyMCE', 'helpwizard' => true, 'tl_class' => 'clr'],
+            'explanation' => 'insertTags',
+            'sql' => ['type' => 'text', 'notnull' => false],
         ],
         'cssClass' => [
             'exclude' => true,
