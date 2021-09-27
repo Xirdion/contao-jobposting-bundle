@@ -13,35 +13,38 @@ declare(strict_types=1);
 namespace Dreibein\JobpostingBundle\Controller\FrontendModule;
 
 use Contao\Config;
+use Contao\Controller;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\Exception\PageNotFoundException;
-use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\Input;
-use Contao\Model\Collection;
 use Contao\ModuleModel;
-use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\Template;
 use Dreibein\JobpostingBundle\Job\JobParser;
+use Dreibein\JobpostingBundle\Job\JsonParser;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @FrontendModule(category="jobs")
+ */
 class JobListController extends AbstractFrontendModuleController
 {
-    protected JobParser $jobParser;
-    protected ContaoFramework $framework;
+    private JobParser $jobParser;
+    private JsonParser $jsonParser;
 
     /**
-     * @var JobModel[]|Collection|null
+     * JobReaderController constructor.
+     *
+     * @param JobParser  $jobParser
+     * @param JsonParser $jsonParser
      */
-    protected ?Collection $jobs;
-
-    public function __construct(JobParser $jobParser, ContaoFramework $framework)
+    public function __construct(JobParser $jobParser, JsonParser $jsonParser)
     {
-        $this->framework = $framework;
         $this->jobParser = $jobParser;
-        $this->jobs = null;
+        $this->jsonParser = $jsonParser;
     }
 
     /**
@@ -55,63 +58,67 @@ class JobListController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        // init an empty list of jobs for the template
-        $template->jobs = [];
-        $template->empty = $GLOBALS['TL_LANG']['MSC']['emptyList'];
-
-        // Check if there are any published jobs within the archives
-        $jobArchives = StringUtil::deserialize($model->job_archives, true);
-
-        $jobAdapter = $this->framework->getAdapter(JobModel::class);
-        $totalJobs = $jobAdapter->countPublishedByPids($jobArchives);
-        if ($totalJobs < 1) {
-            return $template->getResponse();
-        }
-
-        // Try to load the current page model
+        global $objPage;
         $page = $this->getPageModel();
         if (null === $page) {
-            return $template->getResponse();
+            throw new PageNotFoundException('Page not found: ' . $request->getUri());
         }
 
-        // Prepare the module data
-        $offset = (int) $model->skipFirst;
-        $totalJobs -= $offset;
-        $numberOfItems = (int) $model->numberOfItems;
-        $limit = 0;
-        if ($numberOfItems) {
-            $limit = $numberOfItems;
-        }
-        $perPage = (int) $model->perPage;
+        $template->job = '';
+        $template->referer = 'javascript:history.go(-1)';
+        $template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
 
-        // Check if the results must be split into pages
-        if ($perPage > 0 && (!isset($limit) || $numberOfItems > $perPage)) {
-            // Adjust the overall limit
-            if (isset($limit)) {
-                $totalJobs = min($limit, $totalJobs);
-            }
-
-            // Get the current page
-            $id = 'page_n' . $model->id;
-            $currentPage = Input::get($id) ?? 1;
-
-            // Do not index or cache the page if the page number is outside the range
-            if ($currentPage < 1 || $currentPage > max(ceil($totalJobs / $perPage), 1)) {
-                throw new PageNotFoundException('Page not found: ' . $request->getUri());
-            }
-
-            // Add the pagination menu
-            $pagination = new Pagination($totalJobs, $perPage, Config::get('maxPaginationLinks'), $id);
-            $template->pagination = $pagination->generate("\n  ");
+        // Try to find the current job
+        $param = Config::get('useAutoItem') ? 'auto_item' : 'items';
+        $alias = (string) Input::get($param);
+        $pids = StringUtil::deserialize($model->job_archives);
+        $job = JobModel::findPublishedByAliasAndPids($alias, $pids);
+        if (null === $job) {
+            throw new PageNotFoundException('Page not found: ' . $request->getUri());
         }
 
-        // Find all jobs for the current page
-        $this->jobs = $jobAdapter->findPublishedByPids($jobArchives, $limit, $offset, $model->job_order);
-        if (null !== $this->jobs) {
-            $this->jobParser->init($model, $page);
-            $template->jobs = $this->jobParser->parseJobs($this->jobs);
+        // Set the default template
+        if ('' === $model->job_template) {
+            $model->job_template = 'job_full';
+        }
+
+        $this->jobParser->init($model, $page);
+        $template->job = $this->jobParser->parseJob($job);
+        $template->json = $this->jsonParser->parseJob($job);
+
+        // TODO: with Contao 4.12 you can use the Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor::class
+        // Overwrite the page meta data
+        // page title
+        if ($job->getPageTitle()) {
+            $objPage->pageTitle = $job->getPageTitle(); // Already stored decoded
+        } elseif ($job->getTitle()) {
+            $objPage->pageTitle = strip_tags(StringUtil::stripInsertTags($job->getTitle()));
+        }
+
+        // page description
+        if ($job->getDescription()) {
+            $objPage->description = $job->getDescription();
+        } elseif ($job->getTeaser()) {
+            $objPage->description = $this->prepareMetaDescription($job->getTeaser());
         }
 
         return $template->getResponse();
+    }
+
+    /**
+     * Prepare a text to be used in the meta description tag.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    protected function prepareMetaDescription(string $text): string
+    {
+        $text = Controller::replaceInsertTags($text, false);
+        $text = strip_tags($text);
+        $text = str_replace("\n", ' ', $text);
+        $text = StringUtil::substr($text, 320);
+
+        return trim($text);
     }
 }

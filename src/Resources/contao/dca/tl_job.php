@@ -85,18 +85,18 @@ $GLOBALS['TL_DCA'][$table] = [
     'palettes' => [
         '__selector__' => ['addImage', 'overwriteMeta'],
         'default' => '{title_legend},title,alias;'
-                    . '{category_legend},categories;'
-                    . '{date_legend},date,time;'
-                    . '{meta_legend},pageTitle,description,serpPreview;'
-                    . '{teaser_legend},teaser;'
-                    . '{image_legend},addImage;'
-                    . '{company_legend},company,companyUrl,companyLogo;'
-                    . '{job_legend},type,times,postal,city,street,region,country,remote;'
-                    . '{salary_legend},salary,salaryInterval;'
-                    . '{conditions_legend},responsibility,skills,qualification,education,experience;'
-                    . '{apply_legend},apply_active,apply_link,apply_inactive_link,apply_inactive_text;'
-                    . '{expert_legend:hide},cssClass,featured;'
-                    . '{publish_legend},published,start,stop',
+            . '{category_legend},categories;'
+            . '{date_legend},date,time;'
+            . '{meta_legend},pageTitle,description,serpPreview;'
+            . '{teaser_legend},teaser;'
+            . '{image_legend},addImage;'
+            . '{company_legend},company,companyUrl,companyLogo;'
+            . '{job_legend},job_type,job_times,postal,city,street,region,country,remote;'
+            . '{salary_legend},salary,salaryInterval;'
+            . '{conditions_legend},responsibility,skills,qualification,education,experience;'
+            . '{apply_legend},apply_link,apply_inactive_link,apply_inactive_text;'
+            . '{expert_legend:hide},cssClass,featured;'
+            . '{publish_legend},apply_active,published,start,stop',
     ],
 
     'subpalettes' => [
@@ -303,13 +303,13 @@ $GLOBALS['TL_DCA'][$table] = [
             'eval' => ['fieldType' => 'radio', 'filesOnly' => true, 'isGallery' => true, 'extensions' => 'jpg,jpeg,gif,png', 'tl_class' => 'clr m12'],
             'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
         ],
-        'type' => [
+        'job_type' => [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['multiple' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
-        'times' => [
+        'job_times' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
@@ -370,8 +370,6 @@ $GLOBALS['TL_DCA'][$table] = [
             'default' => 'MONTH',
             'exclude' => true,
             'inputType' => 'select',
-            'options' => ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
-            'reference' => &$GLOBALS['TL_LANG'][$table]['jobIntervals'],
             'eval' => ['tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 8, 'notnull' => true, 'default' => ''],
         ],
@@ -413,19 +411,19 @@ $GLOBALS['TL_DCA'][$table] = [
         'apply_active' => [
             'exclude' => true,
             'inputType' => 'checkbox',
-            'eval' => ['tl_class' => 'w50'],
+            'eval' => ['tl_class' => 'w50 m12'],
             'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
         ],
         'apply_link' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['unique' => true, 'rgxp' => 'url', 'tl_class' => 'w50 clr'],
+            'eval' => ['unique' => true, 'rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_link' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['rgxp' => 'url', 'tl_class' => 'w50'],
+            'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_text' => [
@@ -453,7 +451,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'filter' => true,
             'flag' => 1,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'm12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
         ],
         'start' => [

@@ -24,6 +24,7 @@ use Contao\LayoutModel;
 use Contao\PageModel;
 use DateTimeImmutable;
 use Dreibein\JobpostingBundle\Job\AliasGenerator;
+use Dreibein\JobpostingBundle\Job\Job;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
@@ -35,6 +36,7 @@ class JobListener extends AbstractDcaListener
     private ImageSizes $imageSizes;
     private ContaoFramework $framework;
     private TranslatorInterface $translator;
+    private string $lang;
 
     public function __construct(UrlGenerator $urlGenerator, AliasGenerator $aliasGenerator, ImageSizes $imageSizes, ContaoFramework $framework, TranslatorInterface $translator)
     {
@@ -44,6 +46,7 @@ class JobListener extends AbstractDcaListener
         $this->imageSizes = $imageSizes;
         $this->framework = $framework;
         $this->translator = $translator;
+        $this->lang = $GLOBALS['TL_LANGUAGE'] ?? 'en';
     }
 
     /**
@@ -299,17 +302,40 @@ class JobListener extends AbstractDcaListener
      * Get the available types for a job.
      * These are defined by schema.org.
      *
-     * @Callback(table="tl_job", target="fields.type.options")
+     * @Callback(table="tl_job", target="fields.job_type.options")
+     * @Callback(table="tl_content", target="fields.job_type.options")
      *
      * @return array
      */
     public function getJobTypes(): array
     {
+        return $this->buildSelectionList(Job::TYPES, 'job.type.');
+    }
+
+    /**
+     * Get the available salary intervals for a job.
+     * These are defined by schema.org.
+     *
+     * @Callback(table="tl_job", target="fields.salaryInterval.options")
+     *
+     * @return array
+     */
+    public function getJobSalaryInterval(): array
+    {
+        return $this->buildSelectionList(Job::SALARY_INTERVAL, 'job.salary_interval.');
+    }
+
+    /**
+     * @param array  $entries
+     * @param string $translationId
+     *
+     * @return array
+     */
+    private function buildSelectionList(array $entries, string $translationId): array
+    {
         $list = [];
-        $lang = $GLOBALS['TL_LANGUAGE'] ?? 'en';
-        $types = JobModel::TYPES;
-        foreach ($types as $type) {
-            $list[$type] = $this->translator->trans('job.type.' . $type, [], 'DreibeinJobpostingBundle', $lang);
+        foreach ($entries as $entry) {
+            $list[$entry] = $this->translator->trans($translationId . $entry, [], 'DreibeinJobpostingBundle', $this->lang);
         }
 
         return $list;

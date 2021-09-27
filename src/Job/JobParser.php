@@ -25,20 +25,23 @@ use Contao\System;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
 use Exception;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JobParser
 {
     // private Studio $studio;
     private UrlGenerator $urlGenerator;
+    private TranslatorInterface $translator;
     private string $projectDir;
     private Model $model;
     private ?PageModel $page;
     private bool $init = false;
 
-    public function __construct(/* Studio $studio, */ UrlGenerator $urlGenerator, string $projectDir)
+    public function __construct(/* Studio $studio, */ UrlGenerator $urlGenerator, TranslatorInterface $translator, string $projectDir)
     {
         // $this->studio = $studio;
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
         $this->projectDir = $projectDir;
     }
 
@@ -183,6 +186,28 @@ class JobParser
         $template->addBefore = false;
         if ($job->isAddImage()) {
             $this->addImageToTemplate($job, $template);
+        }
+
+        // job data
+        $lang = $GLOBALS['TL_LANGUAGE'] ?? 'en';
+
+        // Prepare the job types with their translations
+        $types = [];
+        $jobTypes = $job->getJobType();
+        foreach ($jobTypes as $jobType) {
+            $types[$jobType] = $this->translator->trans('job.type.' . $jobType, [], 'DreibeinJobpostingBundle', $lang);
+        }
+        $template->job_type = $types;
+
+        // Get the salary interval translation
+        if ($job->getSalaryInterval()) {
+            $template->salaryInterval = $this->translator->trans('job.salary_interval.' . $job->getSalaryInterval(), [], 'DreibeinJobpostingBundle', $lang);
+        }
+
+        // Format a given salary amount
+        if ($job->getSalary()) {
+            $fmt = new \NumberFormatter('de_DE', \NumberFormatter::CURRENCY);
+            $template->salary = $fmt->formatCurrency($job->getSalary(), 'EUR');
         }
 
         return $template->parse();

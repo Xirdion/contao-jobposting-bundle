@@ -30,6 +30,7 @@ services:
     class: Dreibein\JobpostingBundle\Job\JobParser
     arguments:
       - '@Dreibein\JobpostingBundle\Job\UrlGenerator'
+      - '@translator'
       - '%kernel.project_dir%'
 
   Dreibein\JobpostingBundle\Job\JsonParser:

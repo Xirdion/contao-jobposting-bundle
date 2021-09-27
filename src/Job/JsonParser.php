@@ -135,11 +135,11 @@ class JsonParser
      */
     protected function addEmploymentType(): void
     {
-        if (empty($this->job->getType())) {
+        if (empty($this->job->getJobType())) {
             return;
         }
 
-        $this->json['employmentType'] = $this->job->getType();
+        $this->json['employmentType'] = $this->job->getJobType();
     }
 
     /**

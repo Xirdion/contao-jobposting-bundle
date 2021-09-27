@@ -39,8 +39,8 @@ $GLOBALS['TL_LANG']['tl_job'] = [
     'addImage' => ['Ein Bild hinzufügen', 'Dem Job ein Bild hinzufügen.'],
     'company' => ['Firma', 'Name der Firma'],
     'companyLogo' => ['Firmenlogo', 'Logo, das die Organisation repräsentiert, min. 112x112 Pixel, Format: jpg, png oder gif'],
-    'type' => ['Art der Beschäftigung', 'Sie können auch mehrere Beschäftigungsarten angeben.'],
-    'times' => ['Arbeitszeit', 'Beispiel: 8:00-17:00, Gleitzeit'],
+    'job_type' => ['Art der Beschäftigung', 'Sie können auch mehrere Beschäftigungsarten angeben.'],
+    'job_times' => ['Arbeitszeit', 'Beispiel: 8:00-17:00, Gleitzeit'],
     'postal' => ['Postleitzahl', 'Geben Sie die Postleitzahl ein.'],
     'city' => ['Ort', 'Geben Sie den Ort der Beschäftigung ein.'],
     'street' => ['Straße', 'Geben Sie die Straße der Beschäftigung ein.'],
@@ -72,27 +72,4 @@ $GLOBALS['TL_LANG']['tl_job'] = [
     'copy' => ['duplizieren', 'Job duplizieren'],
     'delete' => ['löschen', 'Job %s löschen'],
     'show' => ['Details anzeigen', 'Details des Jobs %s anzeigen'],
-
-    'jobIntervals' => [
-        'HOUR' => 'pro Stunde',
-        'DAY' => 'pro Tag',
-        'WEEK' => 'pro Woche',
-        'MONTH' => 'pro Monat',
-        'YEAR' => 'pro Jahr',
-    ],
 ];
-
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['FULL_TIME'] = 'Vollzeit';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PART_TIME'] = 'Teilzeit';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['CONTRACTOR'] = 'Anbieter';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['TEMPORARY'] = 'Befristet';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['INTERN'] = 'Intern';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['VOLUNTEER'] = 'Freischaffender';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['PER_DIEM'] = 'Tageweise';
-$GLOBALS['TL_LANG']['tl_content']['jobEmptypes']['OTHER'] = 'Andere';
-
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['HOUR'] = 'pro Stunde';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['DAY'] = 'pro Tag';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['WEEK'] = 'pro Woche';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['MONTH'] = 'pro Monat';
-$GLOBALS['TL_LANG']['tl_content']['jobIntervals']['YEAR'] = 'pro Jahr';

@@ -26,12 +26,14 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  * @property string  $categories
  * @property int     $date
  * @property int     $time
+ * @property string  $pageTitle
+ * @property ?string $description
  * @property string  $teaser
  * @property string  $company
  * @property string  $companyUrl
  * @property string  $companyLogo
- * @property string  $type
- * @property string  $times
+ * @property string  $job_type
+ * @property string  $job_times
  * @property string  $postal
  * @property string  $city
  * @property string  $street
@@ -68,17 +70,6 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  */
 class JobModel extends JobRepository
 {
-    public const TYPES = [
-        'FULL_TIME',
-        'PART_TIME',
-        'CONTRACTOR',
-        'TEMPORARY',
-        'INTERN',
-        'VOLUNTEER',
-        'PER_DIEM',
-        'OTHER',
-    ];
-
     // TODO: missing ModelMetadataTrait - not available for contao 4.9
 
     /**
@@ -151,6 +142,22 @@ class JobModel extends JobRepository
     public function getTime(): int
     {
         return (int) $this->time;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageTitle(): string
+    {
+        return $this->pageTitle;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     /**
@@ -276,17 +283,17 @@ class JobModel extends JobRepository
     /**
      * @return array
      */
-    public function getType(): array
+    public function getJobType(): array
     {
-        return StringUtil::deserialize($this->type, true);
+        return StringUtil::deserialize($this->job_type, true);
     }
 
     /**
      * @return string
      */
-    public function getTimes(): string
+    public function getJobTimes(): string
     {
-        return $this->times;
+        return $this->job_times;
     }
 
     /**

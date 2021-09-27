@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA'][$table] = [
         'apply_inactive_link' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['rgxp' => 'url', 'tl_class' => 'w50'],
+            'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_text' => [
