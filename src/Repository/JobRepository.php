@@ -59,47 +59,55 @@ abstract class JobRepository extends AbstractAliasRepository
      * for some specific job archives.
      *
      * @param array  $pIds
+     * @param ?bool  $onlyFeatured
      * @param int    $limit
      * @param int    $offset
      * @param string $order
+     * @param bool   $orderFeatured
      *
      * @return static[]|Model\Collection|null
      */
-    public static function findPublishedByPids(array $pIds, int $limit = 0, int $offset = 0, string $order = ''): ?Model\Collection
+    public static function findPublishedByPids(array $pIds, ?bool $onlyFeatured = null, int $limit = 0, int $offset = 0, string $order = '', bool $orderFeatured = false): ?Model\Collection
     {
         if (empty($pIds)) {
             return null;
         }
 
         // Prepare the query columns
-        $columns = static::getSearchColumns($pIds);
+        $columns = static::getSearchColumns($pIds, $onlyFeatured);
+        $table = static::$strTable;
+        $queryOrder = '';
+
+        // Check if the entries should get ordered by their featured status
+        if (true === $orderFeatured) {
+            $queryOrder = $table . 'featured DESC, ';
+        }
 
         // Prepare the options for the query
-        $table = static::$strTable;
         switch ($order) {
             case 'order_date_asc':
-                $order = $table . '.date ASC';
+                $queryOrder .= $table . '.date ASC';
                 break;
             case 'order_date_desc':
-                $order = $table . '.date DESC';
+                $queryOrder .= $table . '.date DESC';
                 break;
             case 'order_title_asc':
-                $order = $table . '.title ASC';
+                $queryOrder .= $table . '.title ASC';
                 break;
             case 'order_title_desc':
-                $order = $table . '.title DESC';
+                $queryOrder .= $table . '.title DESC';
                 break;
             case 'order_random':
-                $order = 'RAND()';
+                $queryOrder .= 'RAND()';
                 break;
             default:
-                $order = $table . '.date DESC';
+                $queryOrder .= $table . '.date DESC';
         }
 
         $options = [
             'limit' => $limit,
             'offset' => $offset,
-            'order' => $order,
+            'order' => $queryOrder,
         ];
 
         return static::findBy($columns, null, $options);
@@ -124,13 +132,13 @@ abstract class JobRepository extends AbstractAliasRepository
      *
      * @return int
      */
-    public static function countPublishedByPids(array $pIds): int
+    public static function countPublishedByPids(array $pIds, ?bool $onlyFeatured = null): int
     {
         if (empty($pIds)) {
             return 0;
         }
 
-        $columns = static::getSearchColumns($pIds);
+        $columns = static::getSearchColumns($pIds, $onlyFeatured);
 
         return static::countBy($columns);
     }
@@ -139,16 +147,24 @@ abstract class JobRepository extends AbstractAliasRepository
      * Prepare the columns for the count- and find-queries on multiple pIDs.
      *
      * @param array $pIds
+     * @param ?bool $onlyFeatured
      *
      * @return array
      */
-    private static function getSearchColumns(array $pIds): array
+    private static function getSearchColumns(array $pIds, ?bool $onlyFeatured = null): array
     {
         $table = static::$strTable;
         $columns = [];
 
         // all jobs for the given archive IDs.
         $columns[] = sprintf('%s.pid IN (%s)', $table, implode(',', $pIds));
+
+        // Check the featured-mode
+        if (true === $onlyFeatured) {
+            $columns[] = $table . '.featured=1';
+        } elseif (false === $onlyFeatured) {
+            $columns[] = $table . '.featured=0';
+        }
 
         // if not preview mode only show published jobs
         if (false === static::isPreviewMode([])) {

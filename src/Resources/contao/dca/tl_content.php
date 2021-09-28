@@ -14,7 +14,7 @@ $table = 'tl_content';
 
 $GLOBALS['TL_DCA'][$table]['palettes']['job_display'] =
     '{type_legend},type;'
-    . '{job_legend},job_id,job_template;'
+    . '{job_legend},job_id;'
     . '{template_legend:hide},customTpl;'
     . '{protected_legend:hide},protected;'
     . '{expert_legend:hide},guests,cssID;'
@@ -39,11 +39,4 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
         'load' => 'lazy',
     ],
     'sql' => ['mandatory' => true, 'type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
-];
-
-$GLOBALS['TL_DCA'][$table]['fields']['job_template'] = [
-    'exclude' => true,
-    'inputType' => 'select',
-    'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
-    'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
 ];

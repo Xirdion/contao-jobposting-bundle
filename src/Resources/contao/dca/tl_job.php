@@ -217,7 +217,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'imageSize',
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'eval' => ['rgxp' => 'natural', 'includeBlankOption' => true, 'nospace' => true, 'helpwizard' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'floating' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['floating'],

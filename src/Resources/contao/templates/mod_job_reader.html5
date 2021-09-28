@@ -2,7 +2,7 @@
 
 <?php $this->block('content'); ?>
 
-    <?= $this->job ?>
+    <?php $this->insert('job_full', $this->job); ?>
 
     <?php if ($this->json): ?>
         <script type="application/ld+json"><?= $this->json ?></script>

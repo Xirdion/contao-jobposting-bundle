@@ -16,7 +16,6 @@ use Contao\ContentModel;
 use Contao\Controller;
 use Contao\Date;
 use Contao\FilesModel;
-use Contao\FrontendTemplate;
 use Contao\Model;
 use Contao\Model\Collection;
 use Contao\PageModel;
@@ -29,7 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JobParser
 {
-    // private Studio $studio;
     private UrlGenerator $urlGenerator;
     private TranslatorInterface $translator;
     private string $projectDir;
@@ -37,7 +35,7 @@ class JobParser
     private ?PageModel $page;
     private bool $init = false;
 
-    public function __construct(/* Studio $studio, */ UrlGenerator $urlGenerator, TranslatorInterface $translator, string $projectDir)
+    public function __construct(UrlGenerator $urlGenerator, TranslatorInterface $translator, string $projectDir)
     {
         // $this->studio = $studio;
         $this->urlGenerator = $urlGenerator;
@@ -53,7 +51,7 @@ class JobParser
     }
 
     /**
-     * Get a list of parsed templates for all jobs.
+     * Get a list of parsed job data arrays.
      *
      * @param JobModel[]|Collection $jobs
      *
@@ -61,7 +59,7 @@ class JobParser
      *
      * @return array
      */
-    public function parseJobs(Collection $jobs): array
+    public function getJobListData(Collection $jobs): array
     {
         // Check if the parser was initialized
         if (false === $this->init) {
@@ -74,7 +72,7 @@ class JobParser
         }
 
         $count = 0;
-        $parsedArticles = [];
+        $jobList = [];
         $uuids = [];
 
         // Loop over all jobs to collect all uuids of the images
@@ -88,12 +86,12 @@ class JobParser
         FilesModel::findMultipleByUuids($uuids);
 
         foreach ($jobs as $job) {
-            // generate parse the templates for all the jobs
+            // parse the templates for all the jobs
             $cssClass = ((1 === ++$count) ? 'first' : '') . (($count === $limit ? ' last' : '')) . ((($count % 2) === 0) ? ' odd' : ' even');
-            $parsedArticles[] = $this->parseJob($job, $cssClass, $count);
+            $jobList[$job->getId()] = $this->getJobData($job, $cssClass, $count);
         }
 
-        return $parsedArticles;
+        return $jobList;
     }
 
     /**
@@ -101,24 +99,21 @@ class JobParser
      * @param string   $cssClass
      * @param int      $count
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return string
+     * @return array
      */
-    public function parseJob(JobModel $job, string $cssClass = '', int $count = 0): string
+    public function getJobData(JobModel $job, string $cssClass = '', int $count = 0): array
     {
         // Check if the parser was initialized
         if (false === $this->init) {
             throw new \Exception('JobParser was not initialized correctly!');
         }
 
-        // Initialize the job detail template
-        $template = new FrontendTemplate($this->model->job_template ?: 'job_latest');
+        // Add all job data for the template to the array
+        $data = $job->row();
 
-        // Add all columns of the job to the template
-        $template->setData($job->row());
-
-        $categories = StringUtil::deserialize($template->categories, true);
+        $categories = $job->getCategories();
         $categoryData = [];
         foreach ($categories as $categoryId) {
             $category = JobCategoryModel::findById((int) $categoryId);
@@ -126,31 +121,31 @@ class JobParser
                 $categoryData[$category->getId()] = $category;
             }
         }
-        $template->categories = $categoryData;
+        $data['categories'] = $categoryData;
 
         if ('' !== $job->getCssClass()) {
             $cssClass = ' ' . $job->getCssClass() . $cssClass;
         }
 
-        // Add some data to the template
-        $template->class = $cssClass;
-        $template->headline = $job->getTitle();
-        $template->linkHeadline = $this->generateLink($job->getTitle(), $job);
-        $template->more = $this->generateLink($GLOBALS['TL_LANG']['MSC']['more'], $job, true);
-        $template->link = $this->urlGenerator->generateJobUrl($job);
-        $template->archive = $job->getArchive();
-        $template->count = $count;
-        $template->text = '';
-        $template->hasText = false;
-        $template->hasTeaser = false;
+        // Add some default values to the template
+        $data['class'] = $cssClass;
+        $data['headline'] = $job->getTitle();
+        $data['linkHeadline'] = $this->generateLink($job->getTitle(), $job);
+        $data['more'] = $this->generateLink($GLOBALS['TL_LANG']['MSC']['more'], $job, true);
+        $data['link'] = $this->urlGenerator->generateJobUrl($job);
+        $data['archive'] = $job->getArchive();
+        $data['count'] = $count;
+        $data['text'] = '';
+        $data['hasText'] = false;
+        $data['hasTeaser'] = false;
 
         if ('' !== $job->getTeaser()) {
-            $template->hasTeaser = true;
-            $template->teaser = StringUtil::encodeEmail(StringUtil::toHtml5($job->getTeaser()));
+            $data['hasTeaser'] = true;
+            $data['teaser'] = StringUtil::encodeEmail(StringUtil::toHtml5($job->getTeaser()));
         }
 
         $id = $job->getId();
-        $template->text = static function () use ($id) {
+        $data['text'] = static function () use ($id) {
             $text = '';
             $contentModels = ContentModel::findPublishedByPidAndTable($id, 'tl_job');
             if (null === $contentModels) {
@@ -165,27 +160,28 @@ class JobParser
             return $text;
         };
 
-        $template->hasText = static function () use ($id) {
+        $data['hasText'] = static function () use ($id) {
             return ContentModel::countPublishedByPidAndTable($id, 'tl_job');
         };
 
         $dateimFormat = $this->page->datimFormat ?? 'd.m.Y';
-        $template->date = Date::parse($dateimFormat, $job->getDate());
-        $template->timestamp = $job->getDate();
-        $template->datetime = date('Y-m-d\TH:i:sP', $job->getDate());
+        $data['date'] = Date::parse($dateimFormat, $job->getDate());
+        $data['timestamp'] = $job->getDate();
+        $data['datetime'] = date('Y-m-d\TH:i:sP', $job->getDate());
 
         // location
-        $template->street = $job->getStreet();
-        $template->city = $job->getCity();
-        $template->region = $job->getRegion();
-        $template->postal = $job->getPostal();
-        $template->country = System::getCountries()[$job->getCountry()];
+        $data['street'] = $job->getStreet();
+        $data['city'] = $job->getCity();
+        $data['region'] = $job->getRegion();
+        $data['postal'] = $job->getPostal();
+        $data['country'] = System::getCountries()[$job->getCountry()];
 
         // Add an image
-        $template->addImage = false;
-        $template->addBefore = false;
+        $data['addImage'] = false;
+        $data['addBefore'] = false;
         if ($job->isAddImage()) {
-            $this->addImageToTemplate($job, $template);
+            $imageData = $this->getImageData($job);
+            $data = array_merge($data, $imageData);
         }
 
         // job data
@@ -197,20 +193,20 @@ class JobParser
         foreach ($jobTypes as $jobType) {
             $types[$jobType] = $this->translator->trans('job.type.' . $jobType, [], 'DreibeinJobpostingBundle', $lang);
         }
-        $template->job_type = $types;
+        $data['job_type'] = $types;
 
         // Get the salary interval translation
         if ($job->getSalaryInterval()) {
-            $template->salaryInterval = $this->translator->trans('job.salary_interval.' . $job->getSalaryInterval(), [], 'DreibeinJobpostingBundle', $lang);
+            $data['salaryInterval'] = $this->translator->trans('job.salary_interval.' . $job->getSalaryInterval(), [], 'DreibeinJobpostingBundle', $lang);
         }
 
         // Format a given salary amount
         if ($job->getSalary()) {
             $fmt = new \NumberFormatter('de_DE', \NumberFormatter::CURRENCY);
-            $template->salary = $fmt->formatCurrency($job->getSalary(), 'EUR');
+            $data['salary'] = $fmt->formatCurrency($job->getSalary(), 'EUR');
         }
 
-        return $template->parse();
+        return $data;
     }
 
     /**
@@ -234,19 +230,26 @@ class JobParser
     }
 
     /**
-     * Create the picture for the template and add the image data to it.
+     * Create the picture-data for the job.
      *
-     * @param JobModel         $job
-     * @param FrontendTemplate $template
+     * @param JobModel $job
+     *
+     * @return array
      */
-    private function addImageToTemplate(JobModel $job, FrontendTemplate $template): void
+    private function getImageData(JobModel $job): array
     {
+        // TODO: With Contao 4.11 you can use the Contao-Image-Studio
+        $template = new \stdClass();
         $image = FilesModel::findByUuid($job->getSingleSRC());
 
         if (null !== $image && is_file($this->projectDir . '/' . $image->path)) {
             $arrJob = $job->row();
 
             $imageSize = $job->getSize();
+            if ($this->model->imgSize) {
+                // Override the default image size
+                $imageSize = $this->model->imgSize;
+            }
             if ($imageSize) {
                 $size = StringUtil::deserialize($imageSize, true);
 
@@ -266,52 +269,10 @@ class JobParser
                 $template->href = $template->link;
                 $template->linkTitle = StringUtil::specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['readMore'], $job->getTitle()), true);
             }
+
+            return get_object_vars($template);
         }
+
+        return [];
     }
-
-    /*
-    // this function is the approach for contao-version 4.11
-    private function addImageToTemplate(JobModel $job, FrontendTemplate $template): void
-    {
-        // Get the image size from the job itself and override it with settings from the module if given
-        $imgSize = $job->getSize() ?: null;
-        if ($this->model->imgSize) {
-            $size = StringUtil::deserialize($this->model->imgSize);
-
-            if ($size[0] > 0 || $size[1] > 0 || is_numeric($size[2]) || ($size[2][0] ?? null) === '_') {
-                $imgSize = $this->model->imgSize;
-            }
-        }
-
-        // Generate the correct picture data
-        $figureBuilder = $this->studio->createFigureBuilder();
-        try {
-            $figure = $figureBuilder
-                ->fromUuid($job->getSingleSRC())
-                ->setSize($imgSize)
-                ->setMetadata($job->getOverwriteMetadata())
-                ->enableLightbox($job->isFullsize())
-                ->build()
-            ;
-        } catch (InvalidResourceException | \LogicException $e) {
-            // builder was not able to generate the figure
-            return;
-        }
-
-        // Rebuild with link to news article if none is set
-        if (!$figure->getLinkHref()) {
-            $linkTitle = StringUtil::specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['readMore'], $job->getTitle()), true);
-
-            $figure = $figureBuilder
-                ->setLinkHref($template->link)
-                ->setLinkAttribute('title', $linkTitle)
-                ->setOptions(['linkTitle' => $linkTitle]) // Backwards compatibility
-                ->build()
-            ;
-        }
-
-        // Use the legacy way to add the data to the template
-        $figure->applyLegacyTemplateData($template, $job->getImagemargin(), $job->getFloating());
-    }
-    */
 }

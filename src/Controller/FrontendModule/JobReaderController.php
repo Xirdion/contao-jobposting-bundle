@@ -32,8 +32,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class JobReaderController extends AbstractFrontendModuleController
 {
-    private JobParser $jobParser;
-    private JsonParser $jsonParser;
+    protected JobParser $jobParser;
+    protected JsonParser $jsonParser;
 
     /**
      * JobReaderController constructor.
@@ -77,22 +77,23 @@ class JobReaderController extends AbstractFrontendModuleController
             throw new PageNotFoundException('Page not found: ' . $request->getUri());
         }
 
-        // Set the default template
-        if ('' === $model->job_template) {
-            $model->job_template = 'job_full';
-        }
-
         $this->jobParser->init($model, $page);
-        $template->job = $this->jobParser->parseJob($job);
+        $template->job = $this->jobParser->getJobData($job);
         $template->json = $this->jsonParser->parseJob($job);
 
-        // Overwrite the page title
-        if ($job->getTitle()) {
-            $objPage->pageTitle = $job->getTitle();
+        // TODO: with Contao 4.12 you can use the Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor::class
+        // Overwrite the page meta data
+        // page title
+        if ($job->getPageTitle()) {
+            $objPage->pageTitle = $job->getPageTitle(); // Already stored decoded
+        } elseif ($job->getTitle()) {
+            $objPage->pageTitle = strip_tags(StringUtil::stripInsertTags($job->getTitle()));
         }
 
-        // Overwrite the page description
-        if ($job->getTeaser()) {
+        // page description
+        if ($job->getDescription()) {
+            $objPage->description = $job->getDescription();
+        } elseif ($job->getTeaser()) {
             $objPage->description = $this->prepareMetaDescription($job->getTeaser());
         }
 

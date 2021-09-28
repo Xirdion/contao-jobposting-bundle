@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
 
-use Contao\Controller;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Database;
 use Dreibein\JobpostingBundle\Model\JobArchiveModel;
@@ -64,19 +63,6 @@ class ModuleListener
         }
 
         return $data;
-    }
-
-    /**
-     * Get all available job templates.
-     *
-     * @Callback(table="tl_module", target="fields.job_template.options")
-     * @Callback(table="tl_content", target="fields.job_template.options")
-     *
-     * @return array
-     */
-    public function getJobTemplates(): array
-    {
-        return Controller::getTemplateGroup('job_');
     }
 
     /**

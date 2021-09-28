@@ -5,7 +5,9 @@
     <?php if (empty($this->jobs)): ?>
         <p class="empty"><?= $this->empty ?></p>
     <?php else: ?>
-        <?= implode('', $this->jobs) ?>
+        <?php foreach ($this->jobs as $id => $job): ?>
+            <?php $this->insert('job_latest', $job); ?>
+        <?php endforeach; ?>
         <?= $this->pagination ?>
     <?php endif; ?>
 

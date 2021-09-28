@@ -15,8 +15,8 @@ $table = 'tl_module';
 $GLOBALS['TL_DCA'][$table]['fields']['headline']['options'] = ['h1', 'h2', 'h3', 'h4', 'span'];
 
 // Add the new palettes for the new modules
-$GLOBALS['TL_DCA'][$table]['palettes']['job_list'] = '{title_legend},name,headline,type;{config_legend},job_archives,job_readerModule,numberOfItems,job_order,skipFirst,perPage;{template_legend:hide},job_template,customTpl;{image_legend:hide},imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
-$GLOBALS['TL_DCA'][$table]['palettes']['job_reader'] = '{title_legend},name,headline,type;{config_legend},job_archives;{template_legend:hide},job_template,customTpl;{image_legend:hide},imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
+$GLOBALS['TL_DCA'][$table]['palettes']['job_list'] = '{title_legend},name,headline,type;{config_legend},job_archives,job_readerModule,numberOfItems,job_featured,job_order,skipFirst,perPage;{template_legend:hide},customTpl;{image_legend:hide},imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
+$GLOBALS['TL_DCA'][$table]['palettes']['job_reader'] = '{title_legend},name,headline,type;{config_legend},job_archives;{template_legend:hide},customTpl;{image_legend:hide},imgSize;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
 
 // Add new fields to tl_module
 $GLOBALS['TL_DCA'][$table]['fields']['job_archives'] = [
@@ -34,11 +34,13 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_readerModule'] = [
     'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];
 
-$GLOBALS['TL_DCA'][$table]['fields']['job_template'] = [
+$GLOBALS['TL_DCA'][$table]['fields']['job_featured'] = [
     'exclude' => true,
     'inputType' => 'select',
-    'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
-    'sql' => ['type' => 'string', 'length' => 64, 'default' => '', 'notnull' => true],
+    'options' => ['all_items', 'featured', 'unfeatured', 'featured_first'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_module'],
+    'eval' => ['tl_class' => 'w50 clr'],
+    'sql' => ['type' => 'string', 'length' => 16, 'default' => 'all_items', 'notnull' => true],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['job_order'] = [

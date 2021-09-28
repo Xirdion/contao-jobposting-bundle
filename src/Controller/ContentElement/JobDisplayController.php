@@ -65,7 +65,7 @@ class JobDisplayController extends AbstractContentElementController
             $this->jobParser->init($model, $page);
             $template->hasJob = true;
 
-            $template->job = $this->jobParser->parseJob($job);
+            $template->job = $this->jobParser->getJobData($job);
             $template->json = $this->jsonParser->parseJob($job);
         }
 
