@@ -27,7 +27,7 @@ use Dreibein\JobpostingBundle\Repository\JobCategoryRepository;
  * @property bool   $published
  * @property string $singleSRC
  */
-class JobCategoryModel extends JobCategoryRepository
+class JobCategoryModel extends JobCategoryRepository implements JobModelInterface
 {
     /**
      * @return int

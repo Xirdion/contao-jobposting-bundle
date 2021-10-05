@@ -68,7 +68,7 @@ use Dreibein\JobpostingBundle\Repository\JobRepository;
  * @property int     $start
  * @property int     $stop
  */
-class JobModel extends JobRepository
+class JobModel extends JobRepository implements JobModelInterface
 {
     // TODO: missing ModelMetadataTrait - not available for contao 4.9
 
@@ -110,6 +110,14 @@ class JobModel extends JobRepository
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrontendTitle(): string
+    {
+        return $this->getTitle();
     }
 
     /**

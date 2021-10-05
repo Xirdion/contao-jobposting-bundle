@@ -24,7 +24,7 @@ use Dreibein\JobpostingBundle\Repository\JobArchiveRepository;
  * @property string  $apply_inactive_link
  * @property ?string $apply_inactive_text
  */
-class JobArchiveModel extends JobArchiveRepository
+class JobArchiveModel extends JobArchiveRepository implements JobModelInterface
 {
     /**
      * @return int
