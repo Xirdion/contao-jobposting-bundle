@@ -25,15 +25,22 @@ use Dreibein\JobpostingBundle\Model\JobModel;
 class GetSearchablePagesListener
 {
     /**
-     * @param array       $pages
-     * @param int|null    $rootId
-     * @param bool        $isSitemap
-     * @param string|null $language
+     * @param array           $pages
+     * @param int|string|null $rootId
+     * @param bool            $isSitemap
+     * @param string|null     $language
      *
      * @return array
      */
-    public function __invoke(array $pages, int $rootId = null, bool $isSitemap = false, string $language = null): array
+    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, string $language = null): array
     {
+        if (\is_string($rootId)) {
+            $rootId = (int) $rootId;
+            if (0 === $rootId) {
+                $rootId = null;
+            }
+        }
+
         $rootPages = [];
         // add the roo
         if (null !== $rootId) {
