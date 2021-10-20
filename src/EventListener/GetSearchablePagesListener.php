@@ -63,7 +63,7 @@ class GetSearchablePagesListener
             }
 
             // Jobs of this archive are outside the current root
-            if (!empty($rootPages) && !\in_array($archive->getJumpTo(), $rootPages, true)) {
+            if (!empty($rootPages) && !\in_array($archive->getJumpTo(), $rootPages, false)) {
                 continue;
             }
 
