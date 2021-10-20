@@ -43,7 +43,7 @@ class JsonParser
                 'value' => $job->id,
             ],
             'title' => $job->getTitle(),
-            'description' => htmlspecialchars($job->getTeaser()),
+            'description' => htmlspecialchars(strip_tags(nl2br($job->getTeaser()))),
             'datePosted' => ($date->setTimestamp($job->getDate()))->format('Y-m-d'),
         ];
 

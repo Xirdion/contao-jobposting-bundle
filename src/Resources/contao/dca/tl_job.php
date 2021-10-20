@@ -195,7 +195,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'textarea',
-            'eval' => ['rte' => 'tinyMCE', 'tl_class' => 'clr'],
+            'eval' => ['tl_class' => 'clr'],
             'sql' => ['type' => 'text', 'notnull' => false],
         ],
         'addImage' => [
