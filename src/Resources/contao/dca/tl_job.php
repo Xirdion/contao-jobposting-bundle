@@ -61,7 +61,7 @@ $GLOBALS['TL_DCA'][$table] = [
                 'icon' => 'header.svg',
             ],
             'copy' => [
-                'href' => 'act=paste&amp;mode=copy',
+                'href' => 'act=copy',
                 'icon' => 'copy.svg',
             ],
             'delete' => [
@@ -287,7 +287,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, ' notnull' => true, 'default' => ''],
+            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'companyUrl' => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['url'],
@@ -450,6 +450,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
+            'default' => 0, // MySQL converts boolean into TINYINT
             'inputType' => 'checkbox',
             'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],

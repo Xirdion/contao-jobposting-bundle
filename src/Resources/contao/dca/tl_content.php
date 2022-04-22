@@ -25,6 +25,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
     'inputType' => 'jobPicker',
     'foreignKey' => 'tl_job.title',
     'eval' => [
+        'mandatory' => true,
         'dcaPicker' => [
             'do' => 'jobs',
             'context' => 'job',
@@ -38,5 +39,5 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
         'type' => 'belongsToOne',
         'load' => 'lazy',
     ],
-    'sql' => ['mandatory' => true, 'type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+    'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];

@@ -130,9 +130,9 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'published' => [
-            'default' => false,
             'exclude' => true,
             'filter' => true,
+            'default' => 0, // MySQL converts boolean into TINYINT
             'inputType' => 'checkbox',
             'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
         ],

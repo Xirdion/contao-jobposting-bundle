@@ -24,7 +24,11 @@
   "prefer-stable": true,
   "config": {
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "contao-components/installer": true,
+      "contao/manager-plugin": true
+    }
   },
   "extra": {
     "contao-manager-plugin": "Dreibein\\JobpostingBundle\\ContaoManager\\Plugin"
