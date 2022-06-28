@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 
 use Contao\Config;
+use Contao\DataContainer;
+use Contao\DC_Table;
 use Contao\System;
 
 $table = 'tl_job';
@@ -19,7 +21,7 @@ System::loadLanguageFile($contentTable);
 
 $GLOBALS['TL_DCA'][$table] = [
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'ptable' => 'tl_job_archive',
         'ctable' => ['tl_content'],
         'switchToEdit' => true,
@@ -36,9 +38,10 @@ $GLOBALS['TL_DCA'][$table] = [
 
     'list' => [
         'sorting' => [
-            'mode' => 2,
+            'mode' => DataContainer::MODE_PARENT,
             'fields' => ['title'],
             'panelLayout' => 'filter;search,sort,limit',
+            'headerFields' => ['title'],
         ],
         'label' => [
             'fields' => ['title', 'date'],
@@ -63,6 +66,11 @@ $GLOBALS['TL_DCA'][$table] = [
             'copy' => [
                 'href' => 'act=copy',
                 'icon' => 'copy.svg',
+            ],
+            'cut' => [
+                'href' => 'act=paste&amp;mode=cut',
+                'icon' => 'cut.svg',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
             'delete' => [
                 'href' => 'act=delete',
