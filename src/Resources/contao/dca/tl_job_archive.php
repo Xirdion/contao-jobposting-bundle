@@ -10,11 +10,14 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+use Contao\DC_Table;
+use Doctrine\DBAL\Types\Types;
+
 $table = 'tl_job_archive';
 
 $GLOBALS['TL_DCA'][$table] = [
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'ctable' => ['tl_job'],
         'switchToEdit' => true,
         'enableVersioning' => true,
@@ -78,24 +81,24 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
     'fields' => [
         'id' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
         ],
         'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'title' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'frontendTitle' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'jumpTo' => [
             'exclude' => true,
@@ -103,20 +106,20 @@ $GLOBALS['TL_DCA'][$table] = [
             'foreignKey' => 'tl_page.title',
             'eval' => ['mandatory' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
-            'sql' => ['type' => 'integer', 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'default' => 0, 'notnull' => true],
         ],
         'apply_inactive_link' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_text' => [
             'exclude' => true,
             'inputType' => 'textarea',
             'eval' => ['rte' => 'tinyMCE', 'helpwizard' => true, 'tl_class' => 'clr'],
             'explanation' => 'insertTags',
-            'sql' => ['type' => 'text', 'notnull' => false],
+            'sql' => ['type' => Types::TEXT, 'notnull' => false],
         ],
     ],
 ];

@@ -10,13 +10,15 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+use Contao\DC_Table;
 use Contao\Config;
+use Doctrine\DBAL\Types\Types;
 
 $table = 'tl_job_category';
 
 $GLOBALS['TL_DCA'][$table] = [
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
         'markAsCopy' => 'title',
         'sql' => [
@@ -76,44 +78,44 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
     'fields' => [
         'id' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
         ],
         'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'title' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'frontendTitle' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'alias' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'alias', 'unique' => true, 'spaceToUnderscore' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'description' => [
             'exclude' => true,
             'inputType' => 'textarea',
             'eval' => ['rte' => 'tinyMCE', 'helpwizard' => true, 'tl_class' => 'clr'],
             'explanation' => 'insertTags',
-            'sql' => ['type' => 'text', 'notnull' => false],
+            'sql' => ['type' => Types::TEXT, 'notnull' => false],
         ],
         'singleSRC' => [
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['files' => true, 'filesOnly' => true, 'fieldType' => 'radio', 'extensions' => Config::get('validImageTypes'), 'tl_class' => 'clr'],
-            'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
+            'sql' => ['type' => Types::BINARY, 'length' => 16, 'notnull' => false],
         ],
         'jumpTo' => [
             'exclude' => true,
@@ -121,20 +123,20 @@ $GLOBALS['TL_DCA'][$table] = [
             'foreignKey' => 'tl_page.title',
             'eval' => ['fieldType' => 'radio', 'tl_class' => 'clr'],
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
-            'sql' => ['type' => 'integer', 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'default' => 0, 'notnull' => true],
         ],
         'cssClass' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'published' => [
             'exclude' => true,
             'filter' => true,
             'default' => 0, // MySQL converts boolean into TINYINT
             'inputType' => 'checkbox',
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => Types::BOOLEAN, 'default' => false, 'notnull' => true],
         ],
     ],
 ];

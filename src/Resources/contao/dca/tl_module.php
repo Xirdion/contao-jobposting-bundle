@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+use Doctrine\DBAL\Types\Types;
+
 $table = 'tl_module';
 
 $GLOBALS['TL_DCA'][$table]['fields']['headline']['options'] = ['h1', 'h2', 'h3', 'h4', 'span'];
@@ -23,7 +25,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_archives'] = [
     'exclude' => true,
     'inputType' => 'checkbox',
     'eval' => ['multiple' => true, 'mandatory' => true],
-    'sql' => ['type' => 'blob', 'notnull' => false],
+    'sql' => ['type' => Types::BLOB, 'notnull' => false],
 ];
 
 $GLOBALS['TL_DCA'][$table]['fields']['job_readerModule'] = [
@@ -31,7 +33,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_readerModule'] = [
     'inputType' => 'select',
     'reference' => &$GLOBALS['TL_LANG']['tl_module'],
     'eval' => ['includeBlankOption' => true, 'tl_class' => 'w50'],
-    'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+    'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];
 
 $GLOBALS['TL_DCA'][$table]['fields']['job_featured'] = [
@@ -40,7 +42,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_featured'] = [
     'options' => ['all_items', 'featured', 'unfeatured', 'featured_first'],
     'reference' => &$GLOBALS['TL_LANG']['tl_module'],
     'eval' => ['tl_class' => 'w50 clr'],
-    'sql' => ['type' => 'string', 'length' => 16, 'default' => 'all_items', 'notnull' => true],
+    'sql' => ['type' => Types::STRING, 'length' => 16, 'default' => 'all_items', 'notnull' => true],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['job_order'] = [
@@ -48,5 +50,5 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['job_order'] = [
     'inputType' => 'select',
     'reference' => &$GLOBALS['TL_LANG']['tl_module'],
     'eval' => ['tl_class' => 'w50'],
-    'sql' => ['type' => 'string', 'length' => 32, 'default' => 'order_date_desc', 'notnull' => true],
+    'sql' => ['type' => Types::STRING, 'length' => 32, 'default' => 'order_date_desc', 'notnull' => true],
 ];

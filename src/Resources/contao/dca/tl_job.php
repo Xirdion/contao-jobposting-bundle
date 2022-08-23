@@ -11,9 +11,9 @@ declare(strict_types=1);
  */
 
 use Contao\Config;
-use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\System;
+use Doctrine\DBAL\Types\Types;
 
 $table = 'tl_job';
 $contentTable = 'tl_content';
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA'][$table] = [
 
     'list' => [
         'sorting' => [
-            'mode' => DataContainer::MODE_PARENT,
+            'mode' => 4,
             'fields' => ['title'],
             'panelLayout' => 'filter;search,sort,limit',
             'headerFields' => ['title'],
@@ -113,15 +113,15 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
     'fields' => [
         'id' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'autoincrement' => true, 'notnull' => true],
         ],
         'pid' => [
             'foreignKey' => 'tl_job_archive.title',
             'relation' => ['type' => 'belongsTo', 'load' => 'lazy'],
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'title' => [
             'exclude' => true,
@@ -130,14 +130,14 @@ $GLOBALS['TL_DCA'][$table] = [
             'flag' => 1,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'alias' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'alias', 'doNotCopy' => true, 'unique' => true, 'maxlength' => 255, 'tl_class' => 'w50 clr'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'categories' => [
             'exclude' => true,
@@ -159,7 +159,7 @@ $GLOBALS['TL_DCA'][$table] = [
                 'type' => 'belongsToMany',
                 'load' => 'lazy',
             ],
-            'sql' => ['type' => 'blob', 'notnull' => false],
+            'sql' => ['type' => Types::BLOB, 'notnull' => false],
         ],
         'date' => [
             'exclude' => true,
@@ -168,7 +168,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'flag' => 8,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'date', 'mandatory' => true, 'doNotCopy' => true, 'datepicker' => true, 'tl_class' => 'w50 wizard'],
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'time' => [
             'default' => time(),
@@ -178,19 +178,19 @@ $GLOBALS['TL_DCA'][$table] = [
             'flag' => 8,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'time', 'mandatory' => true, 'doNotCopy' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
         ],
         'pageTitle' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'decodeEntities' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'description' => [
             'exclude' => true,
             'inputType' => 'textarea',
             'eval' => ['style' => 'height:60px', 'decodeEntities' => true, 'tl_class' => 'clr'],
-            'sql' => ['type' => 'text', 'notnull' => false],
+            'sql' => ['type' => Types::TEXT, 'notnull' => false],
         ],
         'serpPreview' => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['serpPreview'],
@@ -204,20 +204,20 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr'],
-            'sql' => ['type' => 'text', 'notnull' => false],
+            'sql' => ['type' => Types::TEXT, 'notnull' => false],
         ],
         'addImage' => [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['submitOnChange' => true],
-            'sql' => ['type' => 'string', 'length' => 1, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 1, 'default' => '', 'notnull' => true],
         ],
         'singleSRC' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['singleSRC'],
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['fieldType' => 'radio', 'filesOnly' => true, 'extensions' => Config::get('validImageTypes'), 'mandatory' => true],
-            'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
+            'sql' => ['type' => Types::BINARY, 'length' => 16, 'notnull' => false],
         ],
         'size' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['size'],
@@ -225,7 +225,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'imageSize',
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
             'eval' => ['rgxp' => 'natural', 'includeBlankOption' => true, 'nospace' => true, 'helpwizard' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'floating' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['floating'],
@@ -234,7 +234,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'options' => ['above', 'left', 'right', 'below'],
             'eval' => ['cols' => 4, 'tl_class' => 'w50'],
             'reference' => &$GLOBALS['TL_LANG']['MSC'],
-            'sql' => ['type' => 'string', 'length' => 12, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 12, 'default' => '', 'notnull' => true],
         ],
         'imagemargin' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['imagemargin'],
@@ -242,21 +242,21 @@ $GLOBALS['TL_DCA'][$table] = [
             'inputType' => 'trbl',
             'options' => $GLOBALS['TL_CSS_UNITS'],
             'eval' => ['includeBlankOption' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 128, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 128, 'default' => '', 'notnull' => true],
         ],
         'fullsize' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['fullsize'],
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['tl_class' => 'w50 m12'],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => Types::BOOLEAN, 'default' => false, 'notnull' => true],
         ],
         'overwriteMeta' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['overwriteMeta'],
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['submitOnChange' => true, 'tl_class' => 'w50 clr'],
-            'sql' => ['type' => 'string', 'length' => 1, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 1, 'default' => '', 'notnull' => true],
         ],
         'alt' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['alt'],
@@ -264,7 +264,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'imageTitle' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['imageTitle'],
@@ -272,7 +272,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'imageUrl' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['imageUrl'],
@@ -280,7 +280,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'addWizardClass' => false, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'caption' => [
             'label' => &$GLOBALS['TL_LANG'][$contentTable]['caption'],
@@ -288,14 +288,14 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'allowHtml' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'company' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'companyUrl' => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['url'],
@@ -303,53 +303,53 @@ $GLOBALS['TL_DCA'][$table] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'addWizardClass' => false, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'companyLogo' => [
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['fieldType' => 'radio', 'filesOnly' => true, 'isGallery' => true, 'extensions' => 'jpg,jpeg,gif,png', 'tl_class' => 'clr m12'],
-            'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
+            'sql' => ['type' => Types::BINARY, 'length' => 16, 'notnull' => false],
         ],
         'job_type' => [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['multiple' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'job_times' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'postal' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 32, 'tl_class' => 'clr w50'],
-            'sql' => ['type' => 'string', 'length' => 32, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 32, 'notnull' => true, 'default' => ''],
         ],
         'city' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'street' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'region' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'country' => [
             'exclude' => true,
@@ -360,99 +360,99 @@ $GLOBALS['TL_DCA'][$table] = [
             'options_callback' => static function () {
                 return System::getCountries();
             },
-            'sql' => ['type' => 'string', 'length' => 64, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 64, 'notnull' => true, 'default' => ''],
         ],
         'remote' => [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['tl_class' => 'clr'],
-            'sql' => ['type' => 'boolean', 'notnull' => true, 'default' => false],
+            'sql' => ['type' => Types::BOOLEAN, 'notnull' => true, 'default' => false],
         ],
         'salary' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 10, 'rgxp' => 'digit', 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 10, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 10, 'notnull' => true, 'default' => ''],
         ],
         'salaryInterval' => [
             'default' => 'MONTH',
             'exclude' => true,
             'inputType' => 'select',
             'eval' => ['tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 8, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 8, 'notnull' => true, 'default' => ''],
         ],
         'responsibility' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'skills' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'qualification' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'education' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'experience' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'notnull' => true, 'default' => ''],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'notnull' => true, 'default' => ''],
         ],
         'apply_active' => [
             'exclude' => true,
             'inputType' => 'checkbox',
             'eval' => ['tl_class' => 'w50 m12'],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => Types::BOOLEAN, 'default' => false, 'notnull' => true],
         ],
         'apply_link' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['unique' => true, 'rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_link' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 255, 'dcaPicker' => true, 'tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'apply_inactive_text' => [
             'exclude' => true,
             'inputType' => 'textarea',
             'eval' => ['rte' => 'tinyMCE', 'helpwizard' => true, 'tl_class' => 'clr'],
             'explanation' => 'insertTags',
-            'sql' => ['type' => 'text', 'notnull' => false],
+            'sql' => ['type' => Types::TEXT, 'notnull' => false],
         ],
         'cssClass' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50'],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true],
+            'sql' => ['type' => Types::STRING, 'length' => 255, 'default' => '', 'notnull' => true],
         ],
         'featured' => [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'checkbox',
             'eval' => ['tl_class' => 'w50 m12'],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => Types::BOOLEAN, 'default' => false, 'notnull' => true],
         ],
         'published' => [
             'exclude' => true,
@@ -461,19 +461,19 @@ $GLOBALS['TL_DCA'][$table] = [
             'default' => 0, // MySQL converts boolean into TINYINT
             'inputType' => 'checkbox',
             'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
-            'sql' => ['type' => 'boolean', 'default' => false, 'notnull' => true],
+            'sql' => ['type' => Types::BOOLEAN, 'default' => false, 'notnull' => true],
         ],
         'start' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
-            'sql' => ['type' => 'integer', 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'default' => 0, 'notnull' => true],
         ],
         'stop' => [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
-            'sql' => ['type' => 'integer', 'default' => 0, 'notnull' => true],
+            'sql' => ['type' => Types::INTEGER, 'default' => 0, 'notnull' => true],
         ],
     ],
 ];

@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @link       https://github.com/dreibein/contao-jobposting-bundle
  */
 
+use Doctrine\DBAL\Types\Types;
+
 $table = 'tl_content';
 
 $GLOBALS['TL_DCA'][$table]['palettes']['job_display'] =
@@ -39,5 +41,5 @@ $GLOBALS['TL_DCA'][$table]['fields']['job_id'] = [
         'type' => 'belongsToOne',
         'load' => 'lazy',
     ],
-    'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0, 'notnull' => true],
+    'sql' => ['type' => Types::INTEGER, 'unsigned' => true, 'default' => 0, 'notnull' => true],
 ];
