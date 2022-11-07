@@ -1,13 +1,12 @@
 {
-  "name": "dreibein/contao-jobposting-bundle",
+  "name": "Xirdion/contao-jobposting-bundle",
   "type": "contao-bundle",
-  "description": "Dreibein job posting bundle",
+  "description": "Contao job posting bundle",
   "license": "LGPL-3.0+",
   "authors": [
     {
-      "name": "Agentur Dreibein GmbH",
-      "email": "info@agentur-dreibein.de",
-      "homepage": "https://www.agentur-dreibein.de"
+      "name": "Thomas Dirscherl",
+      "homepage": "https://github.com/Xirdion"
     }
   ],
   "require": {
