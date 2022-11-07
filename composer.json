@@ -1,12 +1,12 @@
 {
-  "name": "Xirdion/contao-jobposting-bundle",
+  "name": "xirdion/contao-jobposting-bundle",
   "type": "contao-bundle",
   "description": "Contao job posting bundle",
   "license": "LGPL-3.0+",
   "authors": [
     {
       "name": "Thomas Dirscherl",
-      "homepage": "https://github.com/Xirdion"
+      "homepage": "https://github.com/xirdion"
     }
   ],
   "require": {
