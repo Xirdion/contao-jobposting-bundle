@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Dreibein job posting bundle.
+ * This file is part of the job posting bundle.
  *
- * @copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
- * @author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
- * @link       https://github.com/dreibein/contao-jobposting-bundle
+ * @author     Thomas Dirscherl <https://github.com/xirdion>
+ * @link       https://github.com/xirdion/contao-jobposting-bundle
  */
 
 namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
@@ -101,7 +100,7 @@ abstract class AbstractDcaListener
         $actionId = $this->toggleData['act'][0] . 'id';
 
         if (Input::get($actionId)) {
-            $this->toggleField((int) Input::get($actionId), (1 === (int) Input::get('state')));
+            $this->toggleField((int) Input::get($actionId), 1 === (int) Input::get('state'));
             Controller::redirect(Controller::getReferer());
         }
 
@@ -149,7 +148,7 @@ abstract class AbstractDcaListener
 
         // Update the database
         $model->tstamp = time();
-        $model->{$field} = $toggled;
+        $model->{$field} = (int) $toggled;
         $model->save();
     }
 }

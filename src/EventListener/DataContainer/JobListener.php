@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Dreibein job posting bundle.
+ * This file is part of the job posting bundle.
  *
- * @copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
- * @author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
- * @link       https://github.com/dreibein/contao-jobposting-bundle
+ * @author     Thomas Dirscherl <https://github.com/xirdion>
+ * @link       https://github.com/xirdion/contao-jobposting-bundle
  */
 
 namespace Dreibein\JobpostingBundle\EventListener\DataContainer;
@@ -22,7 +21,6 @@ use Contao\DataContainer;
 use Contao\Input;
 use Contao\LayoutModel;
 use Contao\PageModel;
-use DateTimeImmutable;
 use Dreibein\JobpostingBundle\Job\AliasGenerator;
 use Dreibein\JobpostingBundle\Job\Job;
 use Dreibein\JobpostingBundle\Job\UrlGenerator;
@@ -131,9 +129,9 @@ class JobListener extends AbstractDcaListener
      *
      * @return int
      */
-    public function loadJobDate($dateTime): int
+    public function setJobDate($dateTime): int
     {
-        $date = new DateTimeImmutable();
+        $date = new \DateTimeImmutable();
         if (0 !== (int) $dateTime) {
             $date = $date->setTimestamp((int) $dateTime);
         }
@@ -153,7 +151,7 @@ class JobListener extends AbstractDcaListener
      */
     public function loadJobTime($time): int
     {
-        $date = new DateTimeImmutable();
+        $date = new \DateTimeImmutable();
         if (0 !== (int) $time) {
             $date = $date->setTimestamp((int) $time);
         }

@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Dreibein job posting bundle.
+ * This file is part of the job posting bundle.
  *
- * @copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
- * @author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
- * @link       https://github.com/dreibein/contao-jobposting-bundle
+ * @author     Thomas Dirscherl <https://github.com/xirdion>
+ * @link       https://github.com/xirdion/contao-jobposting-bundle
  */
 
 namespace Dreibein\JobpostingBundle\Job;
@@ -15,7 +14,6 @@ namespace Dreibein\JobpostingBundle\Job;
 use Contao\Config;
 use Contao\PageModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -25,13 +23,13 @@ class UrlGenerator
     private Request $request;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(RequestStack $requestStack)
     {
         $request = $requestStack->getCurrentRequest();
         if (null === $request) {
-            throw new Exception('Missing request!');
+            throw new \Exception('Missing request!');
         }
         $this->request = $request;
     }
@@ -74,6 +72,6 @@ class UrlGenerator
 
     private function ampersand(string $strString, bool $encode = true): string
     {
-        return preg_replace('/&(amp;)?/i', ($encode ? '&amp;' : '&'), $strString);
+        return preg_replace('/&(amp;)?/i', $encode ? '&amp;' : '&', $strString);
     }
 }

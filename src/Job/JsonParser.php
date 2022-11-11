@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Dreibein job posting bundle.
+ * This file is part of the job posting bundle.
  *
- * @copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
- * @author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
- * @link       https://github.com/dreibein/contao-jobposting-bundle
+ * @author     Thomas Dirscherl <https://github.com/xirdion>
+ * @link       https://github.com/xirdion/contao-jobposting-bundle
  */
 
 namespace Dreibein\JobpostingBundle\Job;
@@ -44,11 +43,11 @@ class JsonParser
             ],
             'title' => $job->getTitle(),
             'description' => htmlspecialchars(strip_tags(nl2br($job->getTeaser()))),
-            'datePosted' => ($date->setTimestamp($job->getDate()))->format('Y-m-d'),
+            'datePosted' => $date->setTimestamp($job->getDate())->format('Y-m-d'),
         ];
 
         if ($job->getStop()) {
-            $this->json['validThrough'] = ($date->setTimestamp($job->getStop()))->format('Y-m-d');
+            $this->json['validThrough'] = $date->setTimestamp($job->getStop())->format('Y-m-d');
         }
 
         // Add the organization of the job to the json array

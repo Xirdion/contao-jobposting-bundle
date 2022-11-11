@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Dreibein job posting bundle.
+ * This file is part of the job posting bundle.
  *
- * @copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
- * @author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
- * @link       https://github.com/dreibein/contao-jobposting-bundle
+ * @author     Thomas Dirscherl <https://github.com/xirdion>
+ * @link       https://github.com/xirdion/contao-jobposting-bundle
  */
 
 namespace Dreibein\JobpostingBundle\Job;
@@ -23,7 +22,6 @@ use Contao\StringUtil;
 use Contao\System;
 use Dreibein\JobpostingBundle\Model\JobCategoryModel;
 use Dreibein\JobpostingBundle\Model\JobModel;
-use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class JobParser
@@ -55,7 +53,7 @@ class JobParser
      *
      * @param JobModel[]|Collection $jobs
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return array
      */
@@ -63,7 +61,7 @@ class JobParser
     {
         // Check if the parser was initialized
         if (false === $this->init) {
-            throw new Exception('JobParser was not initialized correctly!');
+            throw new \Exception('JobParser was not initialized correctly!');
         }
 
         $limit = $jobs->count();
@@ -87,7 +85,7 @@ class JobParser
 
         foreach ($jobs as $job) {
             // parse the templates for all the jobs
-            $cssClass = ((1 === ++$count) ? 'first' : '') . (($count === $limit ? ' last' : '')) . ((($count % 2) === 0) ? ' odd' : ' even');
+            $cssClass = ((1 === ++$count) ? 'first' : '') . ($count === $limit ? ' last' : '') . ((($count % 2) === 0) ? ' odd' : ' even');
             $jobList[$job->getId()] = $this->getJobData($job, $cssClass, $count);
         }
 
@@ -99,7 +97,7 @@ class JobParser
      * @param string   $cssClass
      * @param int      $count
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return array
      */
@@ -224,7 +222,7 @@ class JobParser
             '<a href="%s" title="%s" itemprop="url">%s%s</a>',
             $this->urlGenerator->generateJobUrl($job),
             StringUtil::specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['readMore'], $job->getTitle()), true),
-            ($isReadMore ? $link : '<span itemprop="headline">' . $link . '</span>'),
+            $isReadMore ? $link : '<span itemprop="headline">' . $link . '</span>',
             '<span class="invisible"> ' . $job->getTitle() . '</span>'
         );
     }

@@ -1,11 +1,10 @@
 <?php
 
 $header = <<<'EOF'
-This file is part of the Dreibein job posting bundle.
+This file is part of the job posting bundle.
 
-@copyright  Copyright (c) 2021, Digitalagentur Dreibein GmbH
-@author     Digitalagentur Dreibein GmbH <https://www.agentur-dreibein.de>
-@link       https://github.com/dreibein/contao-jobposting-bundle
+@author     Thomas Dirscherl <https://github.com/xirdion>
+@link       https://github.com/xirdion/contao-jobposting-bundle
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
