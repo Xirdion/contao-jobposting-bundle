@@ -20,7 +20,7 @@ The contao jobposting bundle adds the ability to display and maintain job offers
 
 **Via Composer**
 ```shell
-$ composer require dreibein/contao-jobposting-bundle
+$ composer require xirdion/contao-jobposting-bundle
 ```
 
 **Via Contao Manager**
